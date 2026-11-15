@@ -1,0 +1,69 @@
+# WeAmaze Visionary on a Hostinger VPS (docs/14_DEPLOY_HOSTINGER.md).
+#
+#   app    the site and its enquiry API, built from the Dockerfile in this folder
+#   caddy  HTTPS: gets and renews free Let's Encrypt certificates, redirects http:// and www
+#
+# Start or update:  docker compose up -d --build
+# Settings and secrets live in .env next to this file (copy deploy/hostinger.env.example).
+name: weamaze-visionary
+
+services:
+  app:
+    build:
+      context: .
+      args:
+        PUBLIC_SITE_ENV: production
+        PUBLIC_SITE_URL: https://${SITE_DOMAIN:?Set SITE_DOMAIN in .env}
+    image: weamaze-visionary:latest
+    restart: unless-stopped
+    env_file: .env
+    environment:
+      NODE_ENV: production
+      HOST: 0.0.0.0
+      PORT: "8080"
+      PUBLIC_SITE_ENV: production
+      PUBLIC_SITE_URL: https://${SITE_DOMAIN}
+      LEAD_STORE_DIR: /data
+      TRUST_PROXY: "true"            # Caddy passes on the visitor's address
+      FORCE_HSTS: "true"
+    volumes:
+      - weamaze_data:/data           # enquiries: kept across updates and restarts
+    expose:
+      - "8080"                       # reachable by Caddy only, never from the internet
+    # Hardening: the files of the running site cannot be changed, and the container keeps
+    # only what its start-up step needs (hand /data to the "node" user, then drop to it).
+    read_only: true
+    tmpfs:
+      - /tmp
+    cap_drop: [ALL]
+    cap_add: [CHOWN, FOWNER, SETUID, SETGID]
+    security_opt:
+      - no-new-privileges:true
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "5" }
+
+  caddy:
+    image: caddy:2.10.2-alpine
+    restart: unless-stopped
+    depends_on:
+      app:
+        condition: service_healthy     # start HTTPS once the site answers
+    ports:
+      - "80:80"
+      - "443:443"
+      - "443:443/udp"                # HTTP/3
+    environment:
+      SITE_DOMAIN: ${SITE_DOMAIN}
+    volumes:
+      - ./deploy/Caddyfile:/etc/caddy/Caddyfile:ro
+      - caddy_data:/data             # certificates
+      - caddy_config:/config
+    logging:
+      driver: json-file
+      options: { max-size: "10m", max-file: "5" }
+
+volumes:
+  weamaze_data:
+  caddy_data:
+  caddy_config:

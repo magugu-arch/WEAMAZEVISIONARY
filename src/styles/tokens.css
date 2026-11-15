@@ -1,0 +1,77 @@
+@theme {
+  /* Only CI colours exist as utilities. Defaults are removed on purpose. */
+  --color-*: initial;
+  --color-onyx: #111114;          /* Primary dark identity, text, interfaces */
+  --color-gold: #C6A16A;          /* Signature: monogram, accents, one action per view */
+  --color-ivory: #F4F0E8;         /* Primary light background */
+  --color-graphite: #34343A;      /* Secondary dark surfaces, body text on light */
+  --color-platinum: #BFC0C2;      /* Supporting neutral, secondary text on dark */
+  --color-onyx-raised: #1D1D21;   /* Onyx + 18% Graphite: raised dark surface (derived tint) */
+  --color-ivory-sunk: #ECE7DD;    /* Ivory − 3%: alternate light band (derived tint) */
+  --color-error-on-dark: #E79B8A; /* Semantic error, 8.5:1 on Onyx — always paired with icon + text */
+  --color-error-on-light: #9E3626;/* Semantic error, 6.1:1 on Ivory */
+
+  --font-*: initial;
+  --font-sans: "Geist Variable", "Geist Fallback", ui-sans-serif, system-ui, -apple-system, "Segoe UI", sans-serif;
+  --font-display: "Cormorant Garamond", "Cormorant Fallback", Georgia, "Times New Roman", serif;
+  --font-mono: "Geist Mono Variable", ui-monospace, "SFMono-Regular", Menlo, monospace;
+
+  /* Breakpoints mirror the QA viewport matrix. */
+  --breakpoint-*: initial;
+  --breakpoint-sm: 40rem;   /* 640 */
+  --breakpoint-md: 48rem;   /* 768 — tablet */
+  --breakpoint-lg: 64rem;   /* 1024 — 12-column desktop */
+  --breakpoint-xl: 80rem;   /* 1280 */
+  --breakpoint-2xl: 90rem;  /* 1440 */
+
+  /* Square, mitred, shadowless (CI §25). */
+  --radius-*: initial;
+  --shadow-*: initial;
+  --inset-shadow-*: initial;
+  --drop-shadow-*: initial;
+
+  /* 4 px base (CI §25: 4, 8, 12, 16, 24, 32, 48, 64, 96, 128). */
+  --spacing: 0.25rem;
+
+  /* Critically damped spring, response 0.35 s (CI §25 motion). x(t) = 1 − (1 + ωt)e^(−ωt). */
+  --ease-spring: linear(0, 0.0586, 0.1833, 0.3254, 0.4607, 0.5788, 0.6769, 0.7554, 0.8169, 0.8642, 0.9, 0.9268, 0.9468, 0.9614, 0.9722, 0.98, 0.9857, 0.9898, 0.9927, 0.9948, 0.9963, 0.9974, 0.9982, 0.9987, 0.9991, 1);
+  --ease-out-quiet: cubic-bezier(0.2, 0.7, 0.2, 1);
+}
+
+:root {
+  --wv-spring-duration: 520ms;
+  --wv-fade-duration: 160ms;
+  --wv-margin: 20px;          /* mobile: 4 columns, 20 px margins */
+  --wv-gutter: 16px;
+  --wv-max: 1440px;
+  --wv-header-h: 72px;
+  --wv-focus: 2px solid var(--color-gold);
+  /* Layering (V11.05): media < content < header < dropdown < drawer < dialog < toast < consent */
+  --z-media: 0; --z-content: 1; --z-header: 40; --z-dropdown: 45; --z-drawer: 50; --z-dialog: 60; --z-toast: 70; --z-consent: 80;
+}
+@media (min-width: 48rem) { :root { --wv-margin: 40px; --wv-gutter: 24px; } }
+@media (min-width: 64rem) { :root { --wv-margin: 64px; --wv-gutter: 24px; --wv-header-h: 88px; } }
+
+/* Metric-matched fallbacks reduce layout shift while web fonts load. */
+@font-face { font-family: "Cormorant Fallback"; src: local("Georgia"); size-adjust: 86%; ascent-override: 106%; descent-override: 33%; line-gap-override: 0%; }
+@font-face { font-family: "Geist Fallback"; src: local("Arial"); size-adjust: 104%; ascent-override: 92%; descent-override: 22%; line-gap-override: 0%; }
+
+/* ---------- Type roles (CI §16 hierarchy). Tracking tightens as size grows. ---------- */
+@utility t-display-1 { font-family: var(--font-display); font-weight: 400; font-size: clamp(2.75rem, 1.6rem + 4.6vw, 6rem); line-height: 1; letter-spacing: -0.01em; text-wrap: balance; }
+@utility t-display-2 { font-family: var(--font-display); font-weight: 400; font-size: clamp(2.125rem, 1.55rem + 2.3vw, 3.5rem); line-height: 1.05; letter-spacing: -0.005em; text-wrap: balance; }
+@utility t-display-3 { font-family: var(--font-display); font-weight: 400; font-size: clamp(1.75rem, 1.45rem + 1.2vw, 2.5rem); line-height: 1.1; letter-spacing: -0.004em; text-wrap: balance; }
+@utility t-h2 { font-family: var(--font-sans); font-weight: 500; font-size: clamp(1.5rem, 1.25rem + 1vw, 2rem); line-height: 1.15; letter-spacing: -0.01em; text-wrap: balance; }
+@utility t-h3 { font-family: var(--font-sans); font-weight: 500; font-size: 1.25rem; line-height: 1.3; letter-spacing: -0.005em; }
+@utility t-body-lg { font-family: var(--font-sans); font-weight: 400; font-size: 1.125rem; line-height: 1.55; letter-spacing: -0.002em; text-wrap: pretty; }
+@utility t-body { font-family: var(--font-sans); font-weight: 400; font-size: 1rem; line-height: 1.55; letter-spacing: 0; text-wrap: pretty; }
+@utility t-small { font-family: var(--font-sans); font-weight: 400; font-size: 0.875rem; line-height: 1.5; letter-spacing: 0.002em; }
+@utility t-caption { font-family: var(--font-sans); font-weight: 400; font-size: 0.75rem; line-height: 1.45; letter-spacing: 0.005em; }
+@utility t-nav { font-family: var(--font-sans); font-weight: 400; font-size: 0.9375rem; line-height: 1; letter-spacing: 0; }
+@utility t-label { font-family: var(--font-sans); font-weight: 500; font-size: 0.6875rem; line-height: 1.2; letter-spacing: 0.14em; text-transform: uppercase; }
+@utility t-meta { font-family: var(--font-mono); font-weight: 400; font-size: 0.75rem; line-height: 1.4; letter-spacing: 0; font-variant-numeric: tabular-nums; }
+
+/* ---------- Layout primitives (CI §25 grid: 12 col / 64 px / 24 px; mobile 4 col / 20 px) ---------- */
+@utility wv-container { width: 100%; max-width: calc(var(--wv-max) + 2 * var(--wv-margin)); margin-inline: auto; padding-inline: var(--wv-margin); }
+@utility wv-grid { display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); column-gap: var(--wv-gutter); @media (min-width: 48rem) { grid-template-columns: repeat(8, minmax(0, 1fr)); } @media (min-width: 64rem) { grid-template-columns: repeat(12, minmax(0, 1fr)); } }
+@utility hairline { border-color: color-mix(in srgb, currentColor 16%, transparent); }
+@utility hairline-strong { border-color: color-mix(in srgb, currentColor 32%, transparent); }

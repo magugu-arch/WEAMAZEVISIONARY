@@ -1,0 +1,34 @@
+# HTTPS for WeAmaze Visionary on a Hostinger VPS (docs/14_DEPLOY_HOSTINGER.md).
+# Caddy gets and renews free certificates for both names automatically once the domain's
+# DNS points at this server, and redirects every http:// request to https://.
+
+www.{$SITE_DOMAIN} {
+	redir https://{$SITE_DOMAIN}{uri} permanent
+}
+
+{$SITE_DOMAIN} {
+	# The site sets its own security, caching and compression headers; Caddy only passes
+	# requests through. Caddy replaces any X-Forwarded-For a visitor sends with the real
+	# address, so the site's rate limits cannot be dodged (TRUST_PROXY_HOPS=1).
+	# While the site restarts during an update, hold requests for up to 15 s instead of
+	# failing them, so visitors see a short pause rather than an error.
+	reverse_proxy app:8080 {
+		lb_try_duration 15s
+		lb_try_interval 250ms
+	}
+
+	# CLOUDFLARE (optional, docs/14 "Global performance"): when the domain is proxied by
+	# Cloudflare, uncomment this block, paste Cloudflare's current ranges from
+	# cloudflare.com/ips, and set TRUST_PROXY_HOPS=2 in .env. Without it, every visitor
+	# would appear to come from a Cloudflare address.
+	# reverse_proxy app:8080 {
+	# 	lb_try_duration 15s
+	# 	lb_try_interval 250ms
+	# 	trusted_proxies static 173.245.48.0/20 ...
+	# }
+
+	log {
+		output stdout
+		format console
+	}
+}

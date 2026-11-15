@@ -1,0 +1,88 @@
+# Fly.io configuration for WeAmaze Visionary.
+# Step-by-step deployment: docs/12_DEPLOY_FLY.md
+#
+# Phase 1 (now): one small machine in Johannesburg serves the whole site (prerendered pages
+# + the enquiry API) and keeps enquiries on a persistent volume there.
+# Later phases add stateless "edge" machines in London, Virginia and Singapore without moving
+# any data: see the EXPANSION notes below and docs/13_GLOBAL_ARCHITECTURE.md.
+# Secrets are never written here: use `fly secrets set`.
+
+app = "weamaze-visionary"          # must be unique on Fly.io; change it if the name is taken
+primary_region = "jnb"             # Johannesburg: the only region that stores data
+kill_signal = "SIGTERM"            # the server stops the email outbox and closes cleanly
+kill_timeout = "10s"
+
+[build]
+  dockerfile = "Dockerfile"
+
+  # Public, build-time settings (compiled into the pages; never put secrets here).
+  [build.args]
+    PUBLIC_SITE_ENV = "production"                  # production: indexable, unapproved work left out
+    PUBLIC_SITE_URL = "https://weamazevisionary.com" # the address search engines should show
+
+[env]
+  NODE_ENV = "production"
+  HOST = "0.0.0.0"                 # listen on all interfaces so Fly's proxy can reach the app
+  PORT = "8080"                    # must match internal_port below
+  PUBLIC_SITE_ENV = "production"   # must match the build arg above
+  PUBLIC_SITE_URL = "https://weamazevisionary.com"
+  LEAD_STORE_DIR = "/data"         # the volume mounted below
+  TRUST_PROXY = "true"             # read the visitor's address from Fly's proxy (rate limits)
+  TRUST_PROXY_HOPS = "1"           # 1 = Fly only; set "2" if you put Cloudflare in front
+  FORCE_HSTS = "true"              # browsers always use HTTPS (Fly provides the certificate)
+  PRIMARY_REGION = "jnb"           # must match primary_region; other regions hand data requests here
+  OPERATOR_NOTIFICATION_EMAIL = "weamazevisionary@gmail.com"
+  # Email notifications (B-10): uncomment once a Resend sender domain is verified, and set
+  # the key with:  fly secrets set RESEND_API_KEY=re_xxxxxxxx
+  # EMAIL_PROVIDER = "resend"
+  # EMAIL_FROM = "WeAmaze Visionary <hello@weamazevisionary.com>"
+  # EMAIL_REPLY_TO = "weamazevisionary@gmail.com"
+
+# Process groups. "app" is the primary machine (Johannesburg, with the volume).
+# EXPANSION: to serve visitors from other regions, uncomment the "edge" line, add "edge" to
+# http_service.processes below, deploy, then place edge machines (docs/13, "Adding a region"):
+#   fly scale count edge=0 --region jnb       (edges never run in the primary region)
+#   fly scale count edge=1 --region lhr       (London; likewise iad = Virginia, sin = Singapore)
+[processes]
+  app = "node dist/server/node.js"
+  # edge = "node dist/server/node.js"      # same image, no volume: pages local, data replayed to jnb
+
+# Enquiries and their delivery queue live here and survive deploys and restarts.
+# Only the "app" machine has a volume; edge machines keep no data.
+[[mounts]]
+  source = "weamaze_data"
+  destination = "/data"
+  initial_size = "1gb"
+  processes = ["app"]
+
+[http_service]
+  internal_port = 8080
+  force_https = true               # http:// is redirected to https://
+  auto_stop_machines = "stop"      # idle edge machines stop (no cost for CPU) and wake on a visit
+  auto_start_machines = true
+  min_machines_running = 1         # the Johannesburg machine never stops (queued emails are retried)
+  processes = ["app"]              # EXPANSION: ["app", "edge"]
+
+  [http_service.concurrency]
+    type = "requests"
+    soft_limit = 200
+    hard_limit = 250
+
+  [[http_service.checks]]
+    grace_period = "15s"
+    interval = "30s"
+    timeout = "5s"
+    method = "GET"
+    path = "/api/health"
+
+# The Johannesburg machine. 512 MB leaves room for compression and the outbox.
+[[vm]]
+  size = "shared-cpu-1x"
+  memory = "512mb"
+  processes = ["app"]
+
+# EXPANSION: edge machines only serve files, so the smallest size is enough.
+# [[vm]]
+#   size = "shared-cpu-1x"
+#   memory = "256mb"
+#   processes = ["edge"]

@@ -1,0 +1,59 @@
+/* Motion (CI §25): critically damped, no overshoot, interruptible. CSS transitions
+   retarget from the current presentation value, so every transition here can be
+   reversed mid-flight. Reduced motion replaces movement with short cross-fades. */
+.wv-spring { transition-timing-function: var(--ease-spring); transition-duration: var(--wv-spring-duration); }
+
+/* Scroll reveal: content is visible by default; JS opts elements in, so nothing
+   stays hidden if scripts fail (V10 §12: never hide content until animation completes). */
+[data-reveal="pending"] { opacity: 0; transform: translate3d(0, 24px, 0); }
+[data-reveal] { transition: opacity 600ms var(--ease-out-quiet), transform var(--wv-spring-duration) var(--ease-spring); }
+[data-reveal="shown"] { opacity: 1; transform: none; }
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after { scroll-behavior: auto !important; }
+  [data-reveal="pending"] { transform: none; }
+  [data-reveal] { transition: opacity var(--wv-fade-duration) linear; }
+  .wv-spring { transition-duration: var(--wv-fade-duration) !important; transition-timing-function: linear !important; }
+  .motion-safe-only { display: none !important; }
+}
+@media (prefers-reduced-transparency: reduce) {
+  .wv-glass { background: var(--color-onyx) !important; backdrop-filter: none !important; -webkit-backdrop-filter: none !important; }
+}
+@supports not (transition-timing-function: linear(0, 1)) {
+  :root { --ease-spring: cubic-bezier(0.25, 0.9, 0.3, 1); }
+}
+
+/* ── Parallax (V10 §12) ─────────────────────────────────────────────────────────
+   Depth for a few editorial media moments and the CI motifs, never for text.
+   - Compositor-driven CSS scroll timelines; only the `translate` property moves,
+     so it composes with reveal transforms and never triggers layout.
+   - A frame ([data-parallax-frame]) is the timeline subject and stays fixed in
+     layout; its layer drifts inside it, so nothing can slide over adjacent text
+     and there is zero layout shift. Media layers carry overscan equal to their
+     travel, so an edge is never exposed.
+   - Low amplitude, clamped per breakpoint. Off under reduced motion (the layer
+     then sits flush, with no overscan). Browsers without scroll timelines get a
+     small rAF fallback on precise-pointer devices only (src/lib/parallax.ts).
+   - Frames and their ancestors must not be scroll containers: use overflow: clip,
+     not hidden, on sections that contain one. */
+:root { --wv-parallax: 20px; --wv-hero-shift: calc(2 * var(--wv-parallax)); }
+@media (min-width: 48rem) { :root { --wv-parallax: 32px; } }
+@media (min-width: 64rem) { :root { --wv-parallax: 44px; --wv-hero-shift: 24%; } }
+
+[data-parallax-frame] { view-timeline: --wv-frame block; view-timeline-inset: 0px; } /* not scroll-padding */
+[data-parallax-layer] { position: absolute; inset: 0; }
+
+@keyframes wv-parallax-depth { from { translate: 0 calc(-1 * var(--wv-parallax)); } to { translate: 0 var(--wv-parallax); } }
+@keyframes wv-parallax-hero { from { translate: 0 0; } to { translate: 0 var(--wv-hero-shift); } }
+
+@media (prefers-reduced-motion: no-preference) {
+  [data-parallax-layer="media"] { inset: calc(-1 * var(--wv-parallax)) 0; }
+  /* Below lg the hero film sits in a window above the text: overscan upward only. */
+  [data-parallax-layer="hero"] { top: calc(-1 * var(--wv-hero-shift)); }
+  @media (min-width: 64rem) { [data-parallax-layer="hero"] { top: 0; } }
+
+  @supports (animation-timeline: view()) {
+    [data-parallax-layer] { animation: wv-parallax-depth auto linear both; animation-timeline: --wv-frame; animation-range: cover; }
+    [data-parallax-layer="hero"] { animation-name: wv-parallax-hero; animation-range: exit; }
+  }
+}

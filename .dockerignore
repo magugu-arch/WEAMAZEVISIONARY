@@ -1,0 +1,21 @@
+# Only what the build needs is sent to Docker / Fly's builder.
+# Large or private folders stay on your computer.
+.git
+node_modules
+dist
+data
+deliverables
+source-assets
+docs
+tests
+test-results
+playwright-report
+*.log
+.DS_Store
+
+# Never send environment files (secrets go in `fly secrets set`).
+.env
+.env.*
+
+# Deployment config is read by flyctl, not by the build.
+fly.toml

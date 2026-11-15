@@ -1,0 +1,6 @@
+/* WeAmaze Visionary — CI design tokens and base styles.
+   Source of truth: Corporate Identity Manual v1.0 §15 colour, §16 type, §25 website principles. */
+@import "tailwindcss";
+@import "./tokens.css";
+@import "./globals.css";
+@import "./motion.css";
