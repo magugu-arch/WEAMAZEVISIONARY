@@ -34,7 +34,7 @@ How to put the WeAmaze Visionary website online on Hostinger, for visitors world
 
 | Option | Verdict | Why |
 |---|---|---|
-| **Static site hosting** (Premium, Business web hosting) | **Not suitable** | Pages would work, but every form would stop working: they need the Node server. You asked not to remove functionality. |
+| **Web hosting with the PHP form handler** (Premium, Business web hosting, "Upload website") | **Supported** (added 16 November 2026, section 13) | The pages are uploaded as plain files, and a small PHP program in `api/` receives the forms with the same checks as the Node server, saves each enquiry privately and emails it to the studio. Visitors get no automatic confirmation email, and CRM and online scheduling are not available. |
 | **Managed Node.js web app** (Business or Cloud web hosting) | **Possible, with checks first** | Cheapest and easiest, with Hostinger's CDN and SSL included. But Hostinger's documentation says files changed on the server do not survive a redeploy, and it does not say whether files the app writes itself (your saved enquiries) survive one. Node.js 22 must also be on offer. The project is ready for it (see "Alternative"), but confirm those points with Hostinger support before choosing it. |
 | **VPS KVM 1** | **Recommended** | Runs the exact Docker image tested here, with Node.js 22 built in. Enquiries live on a disk that survives every update. You control HTTPS, firewall and backups, and how visitors' addresses reach the site, which the form's spam limits depend on. It costs a little more, and you apply updates yourself (two commands, below). |
 
@@ -383,6 +383,74 @@ The production setup was built from a clean copy of the project and run with `do
 - **Test suites:** all 96 unit tests and all 100 browser tests pass, as do the type check and lint.
 
 **Not tested here:** Hostinger's own servers (the VPS and DNS do not exist yet), real Let's Encrypt certificates, Cloudflare, and real email delivery (no Resend key yet). Safari and Firefox are covered in `docs/06_QA_REPORT.md`.
+
+## 13. Hostinger web hosting (Premium or Business): upload with the PHP form handler
+
+Use this when the site runs on ordinary Hostinger web hosting, uploaded through **Upload website** or File Manager, rather than as a Node.js app or on a VPS. Plain web hosting cannot run the Node.js server, so without this handler every form answers "Your brief has not been sent". The handler replaces it for the forms only: the pages need no changes.
+
+### What is in the package
+
+`npm run build:hostinger-static` builds the public site and writes everything that goes into `public_html` to `dist/hostinger-static/`:
+
+| Part | What it does |
+|---|---|
+| The pages, images, films, fonts and scripts | The production site, exactly as built for the Node.js host |
+| `.htaccess` | Clean page addresses (`/work`), the site's 404 page, all 12 security headers, compression and caching, and sends every `/api/...` request to the PHP program |
+| `api/index.php` and `api/src/` | The form handler (source in `deploy/hostinger-static/api`) |
+| `api/config.php` | The settings: where emails go, the sender address, the spam limits |
+
+### What the forms do on this hosting
+
+- **Project brief, Contact request box and call request** are accepted with the same checks as the Node server: the same answers are accepted, the same problems are reported beside the same fields, and the same spam protection applies (a hidden field, a minimum time to fill in, same-site checks, 5 sends per visitor in 10 minutes, and 60 per hour for the whole site). A double tap or a retry is never stored twice.
+- **Each enquiry is saved** as a private file (mode 600) in `weamaze-visionary-data/leads/`, a folder created **next to** `public_html`, outside the website. It survives re-uploads of the site and cannot be opened in a browser. If the hosting does not allow that folder, the handler uses `public_html/api/data/` instead, which is locked against browsers; that copy is lost if `public_html` is deleted, so download the files first.
+- **The studio is emailed** the whole enquiry with the hosting's own mail service, with Reply set to the sender. Text typed into the form can never add recipients or change the email's headers. If the mail service is down, the enquiry is still saved and the email is retried automatically (from 5 minutes up to every 6 hours, 12 times), whenever the next visitor uses a form.
+- **Book a call** shows "Online scheduling is not connected yet" and offers the call request form, as on the Node server without a scheduling provider.
+- **Not available on this hosting:** a confirmation email to the visitor (sending mail to addresses typed by strangers would let the form be abused), the CRM webhook and online scheduling. The success messages say only what is true.
+- **Visitor addresses** are never written down: the spam limits keep a keyed fingerprint for at most about an hour.
+
+### Upload
+
+1. Run `npm run build:hostinger-static`, then zip the **contents** of `dist/hostinger-static` (so `index.html`, `.htaccess` and `api/` are at the top of the zip). Or use the ready-made `weamaze-visionary-hostinger-web-hosting.zip`.
+2. In hPanel, open **File Manager** for the website. In `public_html`, delete the old site files (keep any folder you created yourself). Upload the zip and choose **Extract** into `public_html`. Check that `index.html`, `.htaccess` and the `api` folder sit directly inside `public_html`. (The **Reupload** button on the "Upload website" screen does the same.)
+3. **Create the sender mailbox:** hPanel → **Emails** → create `website@weamazevisionary.com` (any password; nobody needs to read it). Hostinger's mail service only sends from addresses that exist on the domain. To use another address, see "Settings" below.
+4. **HTTPS:** hPanel → **Security → SSL**: install the free certificate, then turn on **Force HTTPS**.
+5. **PHP version:** any from 7.4 to 8.4 works (tested on 7.4, 8.3 and 8.4); keep Hostinger's default.
+
+### Check it works
+
+1. Open `https://weamazevisionary.com/api/health`. It should show `"forms":"php"` and `"storage":"ok"`.
+2. Send a test message from the **Contact** page. You should see "Request sent" with a reference such as `WV-MSG-2026-…`, and an email should reach weamazevisionary@gmail.com within a few minutes. Check the spam folder the first time, and mark it "Not spam".
+3. In File Manager, the folder `weamaze-visionary-data/leads` (next to `public_html`) now holds a file named after the reference.
+
+### Settings
+
+To change a setting, copy `api/config.php` to `api/config.local.php` in File Manager and edit the copy: it wins over `config.php`. Re-upload `config.local.php` after any future upload of the site, or keep a copy.
+
+| Setting | Default | Meaning |
+|---|---|---|
+| `operator_email` | weamazevisionary@gmail.com | Where enquiries are emailed. Empty: save only |
+| `mail_from` | website@weamazevisionary.com | The sender. Must be a mailbox that exists on the domain in hPanel |
+| `data_dir` | empty (automatic) | Where enquiries are saved |
+| `rate_limit_max` / `rate_limit_window` | 5 / 600 | Sends allowed per visitor in each window (seconds) |
+| `global_limit_max` / `global_limit_window` | 60 / 3600 | Sends allowed for the whole site in each window |
+| `min_form_seconds` | 3 | Faster than this is treated as a robot |
+
+### Reading enquiries and backups
+
+Every enquiry is in your inbox. The saved files are in File Manager under `weamaze-visionary-data/leads`: download that folder once a month as an off-site copy. A small log of what happened (references and reasons only, no personal details) is kept in `weamaze-visionary-data/log/`.
+
+### If something goes wrong
+
+| What you see | What to do |
+|---|---|
+| "Your brief has not been sent. Something went wrong on our side." | The PHP handler is not answering: check that `.htaccess` and the `api` folder are directly inside `public_html` (File Manager hides files starting with a dot unless "Show hidden files" is on), then open `/api/health` |
+| `/api/health` shows `"storage":"unavailable"` | The handler cannot create its data folder. Ask Hostinger support to confirm PHP may write to the folder next to `public_html`, or set `data_dir` to a folder you created |
+| "Request sent", but no email arrives | Check spam; check that the `mail_from` mailbox exists in hPanel → Emails; the enquiry is saved either way, and the email is retried automatically |
+| "Too many submissions" during your own tests | Wait 10 minutes, or raise `rate_limit_max` in `config.local.php` while testing |
+
+### Testing the web hosting package
+
+`scripts/compare-form-servers.mjs` sends 62 cases (valid forms, every kind of mistake, attacks, double sends) to the Node server and the PHP handler and fails on any difference in the replies or the saved answers. `playwright.hostinger.config.ts` runs the three forms end to end in a browser, on desktop and phone, against a running copy of the package. On 16 November 2026, on Apache with PHP 7.4, 8.3 and 8.4: no differences in 62 cases, 8 of 8 browser tests passed, all 29 pages and 138 links and assets loaded, and email, retry, rate limits and the private data folder behaved as described above.
 
 ## Before going live
 

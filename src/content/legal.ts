@@ -23,7 +23,7 @@ export const legalPages: LegalPage[] = [
       { type: 'h2', id: 'collect', text: 'What we collect' },
       { type: 'ul', items: [
         'Information you enter in our forms: your name, work email, role, organisation, country, time zone, optional phone number and the details of your project, partnership or call request.',
-        'Technical information needed to run the site securely: your IP address is used briefly, in memory, to limit abusive form submissions. It is not stored with your enquiry.',
+        'Technical information needed to run the site securely: your IP address is used briefly to limit abusive form submissions. It is not stored with your enquiry.',
         'We do not use analytics, advertising or tracking cookies on this website at present.',
       ] },
       { type: 'h2', id: 'why', text: 'Why we use it' },

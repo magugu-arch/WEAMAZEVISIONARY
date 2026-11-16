@@ -1,0 +1,66 @@
+# WeAmaze Visionary on Hostinger web hosting (LiteSpeed or Apache with PHP).
+# Built by scripts/build-hostinger-static.mjs: do not edit the copy in public_html by hand.
+# Everything in this folder goes into public_html. Pages, images and films are plain files;
+# the forms are answered by the small PHP program in api/ (docs/14_DEPLOY_HOSTINGER.md).
+
+Options -Indexes -MultiViews
+DirectoryIndex index.html
+ErrorDocument 404 /404.html
+
+# Page addresses without a trailing slash, as on the Node.js host: /work is /work/index.html.
+DirectorySlash Off
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  # The forms: every /api/... address goes to the PHP program (api/.htaccess does the same).
+  RewriteRule ^api/index\.php$ - [L]
+  RewriteRule ^api(/.*)?$ api/index.php [L]
+  # One permanent redirect from /work/ to /work (the home page keeps its slash).
+  RewriteCond %{REQUEST_URI} ^/(.+)/$
+  RewriteRule ^ /%1 [R=301,L,NE]
+  # Serve a page folder's index.html without changing the address.
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteCond %{REQUEST_FILENAME}/index.html -f
+  RewriteRule ^(.+)$ /$1/index.html [L]
+</IfModule>
+
+# Correct types for modern files.
+<IfModule mod_mime.c>
+  AddType image/avif .avif
+  AddType video/webm .webm
+  AddType text/vtt .vtt
+  AddType font/woff2 .woff2
+  AddType application/manifest+json .webmanifest
+  AddType text/javascript .js .mjs
+  AddCharset utf-8 .html .css .js .txt .xml .json .webmanifest .vtt
+</IfModule>
+
+# Compression for text files.
+<IfModule mod_deflate.c>
+  AddOutputFilterByType DEFLATE text/html text/css text/javascript application/javascript application/json application/manifest+json image/svg+xml application/xml text/xml text/plain text/vtt
+</IfModule>
+
+# Security headers: the same policy the Node.js server sends (shared/security.ts).
+<IfModule mod_headers.c>
+  Header always set Content-Security-Policy "{{CSP}}"
+  Header always set Strict-Transport-Security "max-age=63072000; includeSubDomains"
+  Header always set X-Content-Type-Options "nosniff"
+  Header always set Referrer-Policy "{{REFERRER_POLICY}}"
+  Header always set Permissions-Policy "{{PERMISSIONS_POLICY}}"
+  Header always set Cross-Origin-Opener-Policy "same-origin"
+  Header always set Cross-Origin-Resource-Policy "same-origin"
+  Header always set Origin-Agent-Cluster "?1"
+  Header always set X-Frame-Options "DENY"
+  Header always set X-XSS-Protection "0"
+  Header always set X-Permitted-Cross-Domain-Policies "none"
+  Header always set X-DNS-Prefetch-Control "off"
+  Header always unset X-Powered-By
+
+  # Caching: pages are checked for updates on every visit; images and films are kept for
+  # 7 days; scripts and styles (whose names change when they change) for a year (assets/.htaccess).
+  <FilesMatch "\.(html|xml|txt|json|webmanifest)$">
+    Header set Cache-Control "no-cache"
+  </FilesMatch>
+  <FilesMatch "\.(avif|webp|jpg|jpeg|png|svg|ico|mp4|webm|vtt|woff2)$">
+    Header set Cache-Control "public, max-age=604800, stale-while-revalidate=86400"
+  </FilesMatch>
+</IfModule>

@@ -17,6 +17,7 @@
     "prerender": "node scripts/prerender.mjs",
     "build": "npm run build:client && npm run build:ssr && npm run build:server && npm run prerender",
     "build:production": "PUBLIC_SITE_ENV=production npm run build",
+    "build:hostinger-static": "npm run build:production && node scripts/build-hostinger-static.mjs",
     "start": "node dist/server/node.js",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "lint": "eslint .",

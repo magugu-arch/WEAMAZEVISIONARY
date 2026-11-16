@@ -48,7 +48,7 @@ export function organizationLd(): JsonLd {
     '@id': abs('/#organization'),
     name: BRAND,
     url: abs('/'),
-    logo: abs('/icons/icon-512.png'),
+    logo: abs('/app-icons/icon-512.png'),
     description: settings.boilerplateFull,
     slogan: settings.tagline,
     areaServed: 'Worldwide', // owner instruction, 7 Nov 2026: the studio takes international work (D-33)
@@ -227,7 +227,7 @@ export function resolveMeta(pathname: string): RouteMeta {
           datePublished: a.publishedAt,
           ...(a.updatedAt ? { dateModified: a.updatedAt } : {}),
           author: { '@type': 'Organization', name: a.author.name, url: abs('/') },
-          publisher: { '@type': 'Organization', name: BRAND, logo: { '@type': 'ImageObject', url: abs('/icons/icon-512.png') } },
+          publisher: { '@type': 'Organization', name: BRAND, logo: { '@type': 'ImageObject', url: abs('/app-icons/icon-512.png') } },
           image: ogFor(a.heroImage),
           mainEntityOfPage: abs(path),
         },

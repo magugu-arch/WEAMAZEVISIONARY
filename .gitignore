@@ -9,3 +9,7 @@ playwright-report/
 *.log
 .DS_Store
 deliverables/
+
+# Local settings for the PHP form handler (tests or a hand-edited copy); never shipped
+deploy/hostinger-static/api/config.local.php
+docs/qa/

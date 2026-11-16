@@ -1,0 +1,14 @@
+# Every address under /api/ is answered by index.php. The other files in this folder are
+# parts of it and can never be opened on their own.
+<IfModule mod_rewrite.c>
+  RewriteEngine On
+  RewriteRule ^index\.php$ - [L]
+  RewriteRule ^ index.php [L]
+</IfModule>
+<IfModule !mod_rewrite.c>
+  <FilesMatch "^(?!index\.php$).*$">
+    <IfModule mod_authz_core.c>
+      Require all denied
+    </IfModule>
+  </FilesMatch>
+</IfModule>

@@ -208,7 +208,9 @@ test.describe('booking with the development mock (QA-11, QA-12, QA-13)', () => {
     await page.getByRole('link', { name: 'Reschedule or cancel' }).click();
     await expect(page.getByText('Confirmed')).toBeVisible();
     await page.getByRole('button', { name: 'Reschedule' }).click();
-    await page.locator('fieldset', { hasText: 'Times on' }).getByRole('button').nth(1).click();
+    // Move to another day: late in the Tokyo evening the first day can have only the slot just booked.
+    await page.getByRole('group', { name: 'Choose a day' }).getByRole('button').nth(1).click();
+    await page.locator('fieldset', { hasText: 'Times on' }).getByRole('button').first().click();
     await page.getByRole('button', { name: 'Confirm new time' }).click();
     await expect(page.getByText('Rescheduled. The calendar confirmed the new time.')).toBeVisible();
     await page.getByRole('button', { name: 'Cancel call' }).click();
