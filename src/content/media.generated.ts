@@ -712,6 +712,311 @@ export const images = {
       0.5
     ],
     "kind": "document"
+  },
+  "herown-frame-entering": {
+    "id": "herown-frame-entering",
+    "alt": "Seen from behind, a woman in a white gown walks through a rose-covered stone arch into a sunlit garden.",
+    "width": 1920,
+    "height": 1080,
+    "widths": [
+      480,
+      768,
+      1024,
+      1536,
+      1920
+    ],
+    "focal": [
+      0.5,
+      0.5
+    ],
+    "kind": "film"
+  },
+  "herown-frame-first-impression": {
+    "id": "herown-frame-first-impression",
+    "alt": "A perfume bottle and its blush-pink carton on stone in soft light, a petal drifting down.",
+    "width": 1920,
+    "height": 1080,
+    "widths": [
+      480,
+      768,
+      1024,
+      1536,
+      1920
+    ],
+    "focal": [
+      0.5,
+      0.5
+    ],
+    "kind": "film"
+  },
+  "herown-frame-first-bloom": {
+    "id": "herown-frame-first-bloom",
+    "alt": "A blush flower opening in extreme close-up, flecks of pollen catching the light.",
+    "width": 1920,
+    "height": 1080,
+    "widths": [
+      480,
+      768,
+      1024,
+      1536,
+      1920
+    ],
+    "focal": [
+      0.5,
+      0.5
+    ],
+    "kind": "film"
+  },
+  "herown-frame-nature-responds": {
+    "id": "herown-frame-nature-responds",
+    "alt": "A woman in a flowing white gown walks between flowering shrubs in golden light.",
+    "width": 1920,
+    "height": 1080,
+    "widths": [
+      480,
+      768,
+      1024,
+      1536,
+      1920
+    ],
+    "focal": [
+      0.5,
+      0.5
+    ],
+    "kind": "film"
+  },
+  "herown-frame-beauty": {
+    "id": "herown-frame-beauty",
+    "alt": "Close-up of a woman meeting the camera, petals falling past her.",
+    "width": 1920,
+    "height": 1080,
+    "widths": [
+      480,
+      768,
+      1024,
+      1536,
+      1920
+    ],
+    "focal": [
+      0.5,
+      0.5
+    ],
+    "kind": "film"
+  },
+  "herown-frame-fragrance-in-motion": {
+    "id": "herown-frame-fragrance-in-motion",
+    "alt": "Looking into a blush flower towards a glowing light at its heart.",
+    "width": 1920,
+    "height": 1080,
+    "widths": [
+      480,
+      768,
+      1024,
+      1536,
+      1920
+    ],
+    "focal": [
+      0.5,
+      0.5
+    ],
+    "kind": "film"
+  },
+  "herown-frame-final-hero": {
+    "id": "herown-frame-final-hero",
+    "alt": "A perfume bottle and its blush-pink carton among blush roses.",
+    "width": 1920,
+    "height": 1080,
+    "widths": [
+      480,
+      768,
+      1024,
+      1536,
+      1920
+    ],
+    "focal": [
+      0.5,
+      0.5
+    ],
+    "kind": "film"
+  },
+  "herown-storyboard": {
+    "id": "herown-storyboard",
+    "alt": "A World of Her Own storyboard treatment: ten frames of six seconds, from the bottle and its carton to the final packshot, each with shot, VFX and voice-over notes, above the production approach.",
+    "width": 2000,
+    "height": 1125,
+    "widths": [
+      480,
+      768,
+      1024,
+      1536,
+      2000
+    ],
+    "focal": [
+      0.5,
+      0.5
+    ],
+    "kind": "document"
+  },
+  "herown-character-board": {
+    "id": "herown-character-board",
+    "alt": "Character board on grey: a close-up of a woman with dark, loosely pinned curls, freckles and gold hoop earrings, and full-length views from the front and the back in a pleated ivory gown with a thigh-high slit and an open back.",
+    "width": 2000,
+    "height": 1125,
+    "widths": [
+      480,
+      768,
+      1024,
+      1536,
+      2000
+    ],
+    "focal": [
+      0.5,
+      0.5
+    ],
+    "kind": "document"
+  },
+  "form-frame-architecture": {
+    "id": "form-frame-architecture",
+    "alt": "Black and white: a monumental modern building across still water, a vertical line of light at its centre, framed by pines in mist.",
+    "width": 1920,
+    "height": 1080,
+    "widths": [
+      480,
+      768,
+      1024,
+      1536,
+      1920
+    ],
+    "focal": [
+      0.5,
+      0.5
+    ],
+    "kind": "film"
+  },
+  "form-frame-unknown": {
+    "id": "form-frame-unknown",
+    "alt": "Black and white: a misty mountain valley with a stream, a thin vertical line of light far in the distance.",
+    "width": 1920,
+    "height": 1080,
+    "widths": [
+      480,
+      768,
+      1024,
+      1536,
+      1920
+    ],
+    "focal": [
+      0.5,
+      0.5
+    ],
+    "kind": "film"
+  },
+  "form-frame-presence": {
+    "id": "form-frame-presence",
+    "alt": "Looking up between sheer rock walls at a tall column of light rising from wet ground.",
+    "width": 1920,
+    "height": 1080,
+    "widths": [
+      480,
+      768,
+      1024,
+      1536,
+      1920
+    ],
+    "focal": [
+      0.5,
+      0.5
+    ],
+    "kind": "film"
+  },
+  "form-frame-studio": {
+    "id": "form-frame-studio",
+    "alt": "A concrete interior with a glass wall and a curved wall lit from below, the column of light reflected in a polished floor.",
+    "width": 1920,
+    "height": 1080,
+    "widths": [
+      480,
+      768,
+      1024,
+      1536,
+      1920
+    ],
+    "focal": [
+      0.5,
+      0.5
+    ],
+    "kind": "film"
+  },
+  "form-frame-hall": {
+    "id": "form-frame-hall",
+    "alt": "A long hall of concrete columns, the line of light at its far end reflected in the floor.",
+    "width": 1920,
+    "height": 1080,
+    "widths": [
+      480,
+      768,
+      1024,
+      1536,
+      1920
+    ],
+    "focal": [
+      0.5,
+      0.5
+    ],
+    "kind": "film"
+  },
+  "form-frame-geometry": {
+    "id": "form-frame-geometry",
+    "alt": "Seen from above: angular concrete walls, steps and small lights, with the line of light among them.",
+    "width": 1920,
+    "height": 1080,
+    "widths": [
+      480,
+      768,
+      1024,
+      1536,
+      1920
+    ],
+    "focal": [
+      0.5,
+      0.5
+    ],
+    "kind": "film"
+  },
+  "form-frame-signature": {
+    "id": "form-frame-signature",
+    "alt": "The gold W monogram above the WeAmaze Visionary wordmark and the line Creative Intelligence. Made Real., on black.",
+    "width": 1920,
+    "height": 1080,
+    "widths": [
+      480,
+      768,
+      1024,
+      1536,
+      1920
+    ],
+    "focal": [
+      0.5,
+      0.5
+    ],
+    "kind": "film"
+  },
+  "form-storyboard": {
+    "id": "form-storyboard",
+    "alt": "The Form of What’s Next storyboard: fifteen black-and-white frames of two seconds, from a mountain valley to the gold WeAmaze Visionary signature, each with its timing, title and camera move, above three rules: monochrome architectural cinematography, a recurring vertical light form, gold reserved for the brand reveal.",
+    "width": 1344,
+    "height": 752,
+    "widths": [
+      480,
+      768,
+      1024,
+      1344
+    ],
+    "focal": [
+      0.5,
+      0.5
+    ],
+    "kind": "document"
   }
 } as const satisfies Record<string, ImageAsset>;
 export type ImageId = keyof typeof images;

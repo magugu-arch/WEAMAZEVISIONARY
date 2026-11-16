@@ -134,6 +134,8 @@ const art = writeArtifact({
     '/video/digitfms-360p.mp4': '/video/digitfms-720p.mp4',
     '/video/mrb-360p.mp4': '/video/mrb-720p.mp4',
     '/video/backyard-360p.mp4': '/video/backyard-720p.mp4',
+    '/video/herown-360p.mp4': '/video/herown-720p.mp4',
+    '/video/form-360p.mp4': '/video/form-720p.mp4',
   },
 });
 if (art.external.length) throw new Error(`Artifact edition references external resources: ${art.external.join(', ')}`);

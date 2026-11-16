@@ -450,7 +450,7 @@ Every enquiry is in your inbox. The saved files are in File Manager under `weama
 
 ### Testing the web hosting package
 
-`scripts/compare-form-servers.mjs` sends 62 cases (valid forms, every kind of mistake, attacks, double sends) to the Node server and the PHP handler and fails on any difference in the replies or the saved answers. `playwright.hostinger.config.ts` runs the three forms end to end in a browser, on desktop and phone, against a running copy of the package. On 16 November 2026, on Apache with PHP 7.4, 8.3 and 8.4: no differences in 62 cases, 8 of 8 browser tests passed, all 29 pages and 138 links and assets loaded, and email, retry, rate limits and the private data folder behaved as described above.
+`scripts/compare-form-servers.mjs` sends 62 cases (valid forms, every kind of mistake, attacks, double sends) to the Node server and the PHP handler and fails on any difference in the replies or the saved answers. `playwright.hostinger.config.ts` runs the three forms end to end in a browser, on desktop and phone, against a running copy of the package. On 16 November 2026, on Apache with PHP 7.4, 8.3 and 8.4: no differences in 62 cases, 8 of 8 browser tests passed, all 31 pages and 167 links and assets loaded (re-run after the two films were added), and email, retry, rate limits and the private data folder behaved as described above.
 
 ## Before going live
 

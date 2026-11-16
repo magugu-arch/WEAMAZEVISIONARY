@@ -8,6 +8,8 @@ const CASES: { slug: string; key: string; h1: string; firstLine: string; board: 
   { slug: 'digitfms-nothing-moves-unseen', key: 'digitfms', h1: 'DigitFMS: Nothing moves unseen', firstLine: 'Every business', board: /30-second TVC storyboard/ },
   { slug: 'miss-rhee-beauty-the-space-of-restoration', key: 'mrb', h1: 'Miss Rhee Beauty: The Space of Restoration', firstLine: 'Your beauty was never lost…', board: /Director’s storyboard/ },
   { slug: 'my-backyard', key: 'backyard', h1: 'My Backyard', firstLine: 'FATHER: What’s happening?', board: /Fifteen-panel storyboard/, label: 'Studio Concept' },
+  { slug: 'the-form-of-whats-next', key: 'form', h1: 'The Form of What’s Next', firstLine: '[Score and sound design]', board: /Fifteen-frame storyboard/, label: 'Studio Concept' },
+  { slug: 'a-world-of-her-own', key: 'herown', h1: 'A World of Her Own', firstLine: 'Some moments begin in silence.', board: /Storyboard treatment/, label: 'Capability Demonstration' },
 ];
 
 for (const c of CASES) {
@@ -38,7 +40,7 @@ for (const c of CASES) {
     await expect(page.getByText(c.firstLine, { exact: true })).toBeVisible();
     await expect(page.getByText(/To be checked against the final mix/)).toBeVisible();
 
-    const open = page.getByRole('button', { name: /^Open image 1 of 1/ });
+    const open = page.getByRole('button', { name: /^Open image 1 of 1/ }).first();
     await open.click();
     const viewer = page.getByRole('dialog');
     await expect(viewer).toBeVisible();
@@ -85,4 +87,11 @@ test('offline edition carries both films, their storyboards and scripts', async 
     await expect(article.getByText('Script and shots')).toBeVisible();
   }
   await ctx.close();
+});
+
+test('the fragrance film shows its character board whole, beside the storyboard', async ({ page }) => {
+  await page.goto('/work/a-world-of-her-own', { waitUntil: 'load' });
+  await expect(page.getByRole('heading', { level: 3, name: 'Character board' })).toBeVisible();
+  await expect(page.getByRole('button', { name: /^Open image 1 of 1/ })).toHaveCount(2);
+  await expect(page.locator('img[src*="herown-character-board"], source[srcset*="herown-character-board"]').first()).toBeAttached();
 });

@@ -34,6 +34,18 @@ function StoryboardSection({ project }: { project: Project }) {
         <div className="mt-10">
           <Gallery single items={[{ image: storyboard.image, caption: `${storyboard.title}. Select to view full size.` }]} label={`${project.title} storyboard`} />
         </div>
+        {/* A film's second board (a character or look board) sits with the storyboard, shown whole. */}
+        {film && project.feature ? (
+          <div className="mt-14 border-t border-rule pt-10">
+            <div className="flex flex-col gap-4 lg:flex-row lg:items-end lg:justify-between">
+              <h3 id="board-title" className="t-h2">{project.feature.title}</h3>
+              <p className="text-2 max-w-[52ch]">{project.feature.caption}</p>
+            </div>
+            <div className="mt-8">
+              <Gallery single items={[{ image: project.feature.image, caption: `${project.feature.title}. Select to view full size.` }]} label={`${project.title}: ${project.feature.title}`} />
+            </div>
+          </div>
+        ) : null}
         {film ? (
           <div className="mt-14 grid gap-12 border-t border-rule pt-10 lg:grid-cols-12 lg:gap-6">
             <div className="lg:col-span-5">

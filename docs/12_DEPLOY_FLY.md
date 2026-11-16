@@ -29,7 +29,7 @@ Adding London, Virginia or Singapore later, the cost estimate, Cloudflare and da
 
 The live site is built in **production** mode. Search engines can index it, and any work that is not yet cleared for publication is left out completely. Its pages are not built, and its text, images, films and captions are removed from the deployment. The build checks this and stops if anything is left behind.
 
-Today that means the Work section shows **My Backyard**, **DigitFMS** and **Miss Rhee Beauty**.
+Today that means the Work section shows **DigitFMS**, **Miss Rhee Beauty**, **My Backyard**, ***The Form of What’s Next*** and ***A World of Her Own***.
 
 **To publish a project once you have written permission:** open `src/content/projects.ts`, find the project, change `publicationApproved: false` to `publicationApproved: true` in its `permission` section, then run `fly deploy` again.
 

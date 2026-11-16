@@ -87,6 +87,31 @@ describe('content integrity', () => {
       expect(JSON.stringify(p).toLowerCase()).not.toMatch(/\baward|\broi\b|increase[ds]? (sales|revenue)|\d+ ?%/);
     }
   });
+  it('a speculative film featuring a named fragrance says what it is, and is published only with the brand owner’s permission', () => {
+    const f = projects.find((p) => p.slug === 'a-world-of-her-own')!;
+    expect(f.status).toBe('capability-demonstration'); // not a commission
+    expect(f.permission).toMatchObject({ publicationApproved: true, thirdParty: true });
+    expect(f.permission.note).toMatch(/16 November 2026.*permission/);
+    expect(publishableProjects(projects, 'production')).toContain(f);
+    expect(f.note?.text).toMatch(/published with the permission of the brand’s owner\. It was not commissioned by them\./);
+    expect(f.feature?.image).toBe('herown-character-board'); // the character board, shown with the storyboard
+    expect(f.credits.map((c) => c.role)).not.toContain('Client');
+    expect(f.film?.script.at(-1)?.line).toBe('A World of Her Own.');
+    // Only what the film and storyboard show: no fragrance notes, no 4K claim for a 1080p film.
+    expect(JSON.stringify(f).toLowerCase()).not.toMatch(/\b4k\b|top notes?|heart notes?|base notes?|peach|freesia|vanilla|commissioned by boss/);
+  });
+  it('the studio’s own brand film is a Studio Concept with no words, and keeps gold for the brand', () => {
+    const f = projects.find((p) => p.slug === 'the-form-of-whats-next')!;
+    expect(f.status).toBe('studio-concept');
+    expect(f.permission.thirdParty).toBeUndefined();
+    expect(publishableProjects(projects, 'production')).toContain(f);
+    expect(f.film?.durationSec).toBeCloseTo(60.32, 1);
+    // No dialogue: every caption is a bracketed sound cue.
+    for (const l of f.film!.script) expect(l.line).toMatch(/^\[.+\]$/);
+    expect(f.film!.shots.at(-1)?.description).toMatch(/turns gold/);
+    // Only what the film and storyboard show: no results, clients or claims (the internal permission note aside).
+    expect(JSON.stringify({ ...f, permission: undefined }).toLowerCase()).not.toMatch(/\baward|\bclient\b|\broi\b|\b4k\b|\d+ ?%/);
+  });
   it('contains no banned claims in service copy', () => {
     const text = JSON.stringify(services).toLowerCase();
     for (const banned of ['best in the world', 'award-winning', 'guaranteed results', 'first place on google', 'cutting-edge', 'revolutionary', 'game-changing']) {

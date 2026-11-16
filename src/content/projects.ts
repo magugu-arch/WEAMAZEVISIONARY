@@ -4,7 +4,10 @@ import type { Project } from './types';
  * Portfolio. Every item carries a provenance label (V10 §08). Client work is
  * owner-supplied material (7 Nov 2026), written up only from what it shows: no
  * metrics, outcomes, quotes or dates are added, and publication waits on written
- * permission (B-14). Studio concepts are internally created, not paid commissions.
+ * permission (B-14). A World of Her Own is a speculative film featuring a named
+ * fragrance, labelled Capability Demonstration, published with the brand owner's permission
+ * (owner-confirmed 16 Nov 2026, B-27). Studio concepts are internally created, not paid
+ * commissions; The Form of What's Next is the studio's own brand film.
  */
 const governance = { publish: 'published', approval: 'pending', owner: 'Owner / creative director' } as const;
 
@@ -255,6 +258,193 @@ export const projects: Project[] = [
       title: 'My Backyard animated short — studio concept',
       description: 'A 15-second felt-textured animated short in which a magnifying glass turns wonder into a scare and back into a laugh, with its storyboard and the strategy behind it.',
       ogImage: 'backyard-frame-lens',
+    },
+    governance,
+  },
+  {
+    slug: 'the-form-of-whats-next',
+    title: 'The Form of What’s Next',
+    sector: 'Creative technology',
+    services: ['ai-creative-studio', 'brand-strategy-creative-direction', '3d-animation-motion-design'],
+    status: 'studio-concept',
+    summary: 'A 60-second brand film for WeAmaze Visionary. A single line of light travels from an untouched mountain valley, through a forest and into monumental architecture, then folds into the studio’s monogram: Creative Intelligence, Made Real, told without a word.',
+    scope: 'Concept, fifteen-frame storyboard and a 60-second brand film, 16:9, in black and white with a gold brand reveal.',
+    context: [
+      'The studio’s own film, made to show what WeAmaze Visionary stands for before anyone reads a line about it. The studio film shows the range of worlds the studio builds for others; this one is about the studio itself.',
+    ],
+    challenge: [
+      'A creative studio’s brand film is judged twice: as a statement, and as a sample of the work. The easy answer is a fast showreel of everything the studio can do, and the brand gets lost among the clips. With no words to lean on, the pictures had to carry one clear idea from the first frame to the last.',
+    ],
+    insight: [
+      'The studio’s line, Creative Intelligence, Made Real, describes a journey: from an idea nobody can touch to something built that people can stand inside. That journey can be shown with a single element moving through the world, and light is the oldest sign of an idea.',
+    ],
+    idea: [
+      'The Form of What’s Next. A vertical line of light appears far off in a wilderness and keeps appearing: between walls of rock, between the trees, at the heart of a building, at the end of a hall of columns. Then it breaks into lines that come together as the W monogram. The light is the idea, the places are the work it passes through, and the monogram is where it becomes the brand.',
+    ],
+    execution: [
+      'Twelve movements in sixty seconds, from nature to architecture to abstraction. The line of light stays at or near the centre of almost every frame, so the eye knows where to look after every cut, and each place is a little more made than the last: mountains, rock, forest, a building across still water, raw concrete, a studio, a hall, a maze of walls seen from above.',
+      'Black and white throughout, with one rule: gold is reserved for the brand. The film stays monochrome until its final seconds, when the monogram turns gold and the wordmark and the line Creative Intelligence. Made Real. appear, so the only colour in the film belongs to WeAmaze Visionary.',
+      'No dialogue. The score carries the climb, falls to near silence as the lines draw the monogram, and lands a single deep hit as it turns gold. The fifteen-frame storyboard was drawn for 30 seconds at two seconds a frame; the film gives each movement about twice that time, so the same board is the plan for a 30-second version.',
+    ],
+    statement: { label: 'The idea', text: 'An idea becomes real when it takes form.' },
+    deliverables: ['60-second brand film, 16:9', 'Fifteen-frame storyboard with timings, shot titles and camera moves', 'Three visual rules: monochrome architectural cinematography, a recurring vertical light, gold only for the brand', 'A board already timed for a 30-second version'],
+    outcome: null,
+    credits: [{ role: 'Concept, storyboard and film', name: 'WeAmaze Visionary' }],
+    heroImage: 'form-frame-architecture',
+    gallery: [
+      { image: 'form-frame-unknown', caption: 'The unknown. The line of light first appears, far off, in a wilderness.' },
+      { image: 'form-frame-presence', caption: 'The presence. Between walls of rock, the light rises.' },
+      { image: 'form-frame-studio', caption: 'The studio. The same line of light, now inside the work.' },
+      { image: 'form-frame-hall', caption: 'The hall. Symmetry brings the eye back to the light.' },
+      { image: 'form-frame-geometry', caption: 'The geometry. From above, the architecture becomes a pattern.' },
+      { image: 'form-frame-signature', caption: 'The signature. Gold, used once, for the brand.' },
+    ],
+    film: {
+      key: 'form',
+      title: 'The Form of What’s Next',
+      durationSec: 60.32,
+      durationLabel: '1:00',
+      isoDuration: 'PT1M',
+      format: '60-second brand film, 16:9, black and white with a gold reveal',
+      poster: 'form-frame-architecture',
+      sound: 'Score and sound design, with no dialogue.',
+      script: [
+        { start: 0.5, end: 52.0, line: '[Score and sound design]' },
+        { start: 52.0, end: 55.4, line: '[The sound falls to near silence]' },
+        { start: 55.5, end: 59.5, line: '[A deep hit as the monogram turns gold]' },
+      ],
+      scriptNote: 'There are no words in the film. The sound cues, which become the captions, are described from the soundtrack. To be checked against the final mix.',
+      shots: [
+        { start: 0, end: 4.42, title: 'The unknown', description: 'Extreme wide, in black and white: a misty mountain valley with a stream, and a thin line of light far in the distance.' },
+        { start: 4.42, end: 9.71, title: 'The presence', description: 'Low angle between sheer rock walls: a tall column of light rises from wet ground.' },
+        { start: 9.71, end: 15.08, title: 'Through the trees', description: 'A dark forest of tall trunks; moving through it, the light appears between them.' },
+        { start: 15.08, end: 20.58, title: 'Architecture', description: 'Through the pines, a monumental building stands across still water, the light at its centre.' },
+        { start: 20.58, end: 22.5, title: 'Material', description: 'Extreme close-up: the camera slides across textured concrete to a lit edge.' },
+        { start: 22.5, end: 30.13, title: 'The studio', description: 'A concrete interior with a glass wall and a curved wall lit from below; the column of light stands in the room, reflected in the floor.' },
+        { start: 30.13, end: 35.29, title: 'The hall', description: 'A long hall of concrete columns, the light at its far end.' },
+        { start: 35.29, end: 40.67, title: 'Ascent', description: 'Looking up: the column of light rises through cone-shaped concrete forms.' },
+        { start: 40.67, end: 45.17, title: 'The geometry', description: 'From above, the camera descends over angular walls, steps and small lights, the line of light among them.' },
+        { start: 45.17, end: 49.38, title: 'Transformation', description: 'In mist, the column of light splits into sharp facets.' },
+        { start: 49.38, end: 55.17, title: 'The form', description: 'Thin lines of light cross the dark and come together as the W monogram, in white.' },
+        { start: 55.17, end: 60.32, title: 'The signature', description: 'The monogram turns gold; the WeAmaze Visionary wordmark appears, then the line Creative Intelligence. Made Real.' },
+      ],
+    },
+    storyboard: {
+      image: 'form-storyboard',
+      title: 'Fifteen-frame storyboard',
+      caption: 'Drawn as a 30-second film, two seconds a frame, each with its timing, title and camera move, under three rules: monochrome architectural cinematography, a recurring vertical light, and gold only for the brand reveal.',
+    },
+    permission: { publicationApproved: true, note: 'The studio’s own brand film, supplied by the owner on 16 November 2026. No client or other company’s brand appears. Confirm the music and sound rights and check the caption cues against the final mix (B-24).' },
+    seo: {
+      title: 'The Form of What’s Next — WeAmaze Visionary brand film',
+      description: 'A 60-second black-and-white brand film in which a line of light travels from mountains to architecture and becomes the WeAmaze Visionary monogram, with its storyboard and the thinking behind it.',
+      ogImage: 'form-frame-architecture',
+    },
+    governance,
+  },
+  {
+    slug: 'a-world-of-her-own',
+    title: 'A World of Her Own',
+    sector: 'Luxury fragrance',
+    services: ['brand-strategy-creative-direction', '3d-animation-motion-design'],
+    status: 'capability-demonstration',
+    summary: 'A 60-second fragrance film featuring BOSS The Scent for Her, made by the studio to show how a scent can be felt on screen. It begins in silence with the bottle, opens into a world that answers her every step, and returns to the bottle as the signature that stays.',
+    scope: 'Concept, storyboard treatment, voice-over and a 60-second film, 16:9, with a plan for cut-downs.',
+    context: [
+      'A self-initiated film for an existing fragrance, made to show how the studio would bring a luxury scent to the screen. The product, its blush-pink carton and its name belong to their owners; everything else, from the idea to the final frame, is the studio’s.',
+    ],
+    challenge: [
+      'A fragrance cannot be smelt through a screen. Films in the category often fall back on glamour and a hero bottle, and the feeling of wearing the scent, the part that sells it, is left to the viewer’s imagination.',
+    ],
+    insight: [
+      'A scent is personal before it is public. It changes how the wearer feels in her own space before anyone else notices. The film is told from inside that feeling, not from the outside looking at her.',
+    ],
+    idea: [
+      'A World of Her Own. The bottle opens the film in silence; a breath at the window and a single bloom open her world; the garden responds to her steps; and the camera passes through a flower of light before the bottle returns as the signature that stays. Product, world, product: the scent becomes the place she goes, and the bottle is how to get there.',
+    ],
+    execution: [
+      'Ten movements of six seconds, each with one image and at most one line. The voice-over is spare, closer to a poem than a script, and saves the name for the final shot: “BOSS The Scent for Her. A World of Her Own.” Because every movement stands alone, the treatment plans 30- and 15-second cut-downs and a 9:16 version without losing the story.',
+      'One palette, taken from the carton: blush, warm ivory and gold in low golden-hour light. Petals are the thread that carries the eye from the box to the window, the garden and back to the bottle. The bloom does the work a scent cannot: it opens at 0:12, and at 0:42 the camera travels through it into light, so the fragrance is seen in motion.',
+      'The camera follows her rather than watching her. She enters her world from behind, through a rose arch, and meets the lens only once, in the close-up “Every detail. Every feeling.” The storyboard sets the production standard: 100 mm macro for the bottle and the bloom, portrait lenses for her, procedural bloom, petal and particle simulation, an accurate 3D bottle with glass and liquid, and a warm blush grade.',
+      'A character board keeps her the same woman in every shot: her face and freckles, loosely pinned curls, gold hoops and a pleated ivory gown, seen close up and from the front and the back. The gown’s open back is what the camera sees as she walks into her world, and its movement is what the garden answers.',
+    ],
+    statement: { label: 'The idea', text: 'A world that feels entirely her own.' },
+    deliverables: ['60-second film, 16:9', 'Ten-frame storyboard treatment with shot, VFX and voice-over notes', 'Character board: face, hair, jewellery and gown, from the front and the back', 'Production approach: cinematography, simulation, 3D product and finishing', 'Cut-down plan: 30 and 15 seconds, and 9:16'],
+    outcome: null,
+    note: {
+      title: 'What this is',
+      text: 'A speculative film made by the studio to show its approach to luxury fragrance, published with the permission of the brand’s owner. It was not commissioned by them. The product, packaging and name are theirs and are shown to present the idea.',
+    },
+    credits: [
+      { role: 'Concept, storyboard and film', name: 'WeAmaze Visionary' },
+      { role: 'Product featured', name: 'BOSS The Scent for Her' },
+    ],
+    heroImage: 'herown-frame-entering',
+    gallery: [
+      { image: 'herown-frame-first-impression', caption: '“Some moments begin in silence.” The bottle and its carton, as a petal drifts down.' },
+      { image: 'herown-frame-first-bloom', caption: '“And the world begins to open.” The first bloom, in extreme macro.' },
+      { image: 'herown-frame-nature-responds', caption: '“One step becomes a thousand possibilities.” The garden answers her steps.' },
+      { image: 'herown-frame-beauty', caption: '“Every detail. Every feeling.” The only moment she meets the lens.' },
+      { image: 'herown-frame-fragrance-in-motion', caption: 'The fragrance in motion: the camera passes through the bloom into light.' },
+      { image: 'herown-frame-final-hero', caption: '“A signature that stays.” The film closes where it began, on the bottle.' },
+    ],
+    film: {
+      key: 'herown',
+      title: 'A World of Her Own',
+      durationSec: 59.88,
+      durationLabel: '1:00',
+      isoDuration: 'PT1M',
+      format: '60-second fragrance film, 16:9',
+      poster: 'herown-frame-entering',
+      sound: 'Voice-over and score.',
+      script: [
+        { start: 0.95, end: 2.75, line: 'Some moments begin in silence.' },
+        { start: 12.4, end: 13.0, line: 'A breath.' },
+        { start: 14.5, end: 15.3, line: 'A shift in the light.' },
+        { start: 18.3, end: 20.2, line: 'And the world begins to open.' },
+        { start: 24.5, end: 27.2, line: 'One step becomes a thousand possibilities.' },
+        { start: 30.0, end: 30.7, line: 'Every detail.' },
+        { start: 32.2, end: 33.2, line: 'Every feeling.' },
+        { start: 42.0, end: 45.3, line: 'A world that feels entirely her own.' },
+        { start: 47.8, end: 48.7, line: 'More than a fragrance.' },
+        { start: 50.0, end: 51.5, line: 'A signature that stays.' },
+        { start: 53.9, end: 55.5, line: 'BOSS The Scent for Her.' },
+        { start: 56.4, end: 57.7, line: 'A World of Her Own.' },
+      ],
+      scriptNote: 'Voice-over as written in the storyboard treatment, timed to the speech in the soundtrack. To be checked against the final mix.',
+      shots: [
+        { start: 0, end: 6.0, title: 'The first impression', description: 'The bottle and its blush-pink carton on stone in soft morning light, as a petal drifts down.' },
+        { start: 6.0, end: 12.0, title: 'A moment of possibility', description: 'A woman by a sheer curtain turns her head towards the light.' },
+        { start: 12.0, end: 18.0, title: 'The first bloom', description: 'A blush flower opens in extreme close-up, flecks of pollen catching the light.' },
+        { start: 18.0, end: 24.0, title: 'Entering her world', description: 'Seen from behind in a white gown, she walks through a rose-covered stone arch into a sunlit garden.' },
+        { start: 24.0, end: 30.0, title: 'Nature responds', description: 'She walks between flowering shrubs, her gown trailing as petals drift.' },
+        { start: 30.0, end: 34.21, title: 'The beauty of the moment', description: 'Close-up: she meets the camera as petals fall past.' },
+        { start: 34.21, end: 36.0, title: 'Her signature', description: 'Her hand holds the bottle at her neck.' },
+        { start: 36.0, end: 42.0, title: 'A world unfolds', description: 'She walks a garden path to a still reflecting pool, and the camera rises over formal gardens.' },
+        { start: 42.0, end: 48.0, title: 'The fragrance in motion', description: 'The camera travels into a blush bloom towards a glowing light at its heart.' },
+        { start: 48.0, end: 54.0, title: 'The product reveal', description: 'The bottle on a polished surface among fallen petals.' },
+        { start: 54.0, end: 59.88, title: 'The final hero', description: 'The bottle and its carton among blush roses: a clean end frame.' },
+      ],
+    },
+    feature: {
+      image: 'herown-character-board',
+      title: 'Character board',
+      caption: 'One reference for her face, hair, jewellery and gown, close up and from the front and the back, so she stays the same person in every shot.',
+    },
+    storyboard: {
+      image: 'herown-storyboard',
+      title: 'Storyboard treatment',
+      caption: 'Ten frames of six seconds, each with its shot, VFX and voice-over notes, and the production approach from cinematography to finishing. The film follows it movement for movement.',
+    },
+    permission: {
+      publicationApproved: true,
+      thirdParty: true,
+      note: 'A speculative film featuring BOSS The Scent for Her, not commissioned by the brand’s owners. On 16 November 2026 the owner confirmed that permission to publish it has been received from the brand owner (B-27). Keep the written permission on file; check the captions against the final mix (B-24).',
+    },
+    seo: {
+      title: 'A World of Her Own — fragrance film concept',
+      description: 'A 60-second fragrance film concept that makes a scent felt on screen: a bottle, a bloom and a world that answers her steps, with its storyboard and the strategy behind it.',
+      ogImage: 'herown-frame-entering',
     },
     governance,
   },

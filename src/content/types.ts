@@ -83,7 +83,8 @@ export type Project = {
   /**
    * Editorial case studies (no film): the idea set as a display line between the hero and
    * the story, a few numbered principles in place of long execution paragraphs, and one
-   * feature image shown whole on a light band. All optional; film case studies omit them.
+   * feature image shown whole on a light band. All optional. On a film case study, `feature`
+   * is a second board (a character or look board) shown with the storyboard.
    */
   statement?: { label: string; text: string };
   principles?: { title: string; items: { title: string; text: string }[] };

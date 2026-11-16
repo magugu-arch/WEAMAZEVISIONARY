@@ -4,7 +4,7 @@ import AxeBuilder from '@axe-core/playwright';
 
 /** Journeys and QA IDs from V11.22. Runs against the production build (node dist/server/node.js). */
 
-const ROUTES = ['/', '/work', '/work/digitfms-nothing-moves-unseen', '/work/miss-rhee-beauty-the-space-of-restoration', '/work/my-backyard', '/services', '/services/ai-creative-studio', '/services/websites-digital-experiences', '/approach', '/studio', '/insights', '/insights/human-led-ai-how-we-direct-review-and-stay-accountable', '/start-a-project', '/book-a-call', '/contact', '/privacy', '/terms', '/cookies'];
+const ROUTES = ['/', '/work', '/work/digitfms-nothing-moves-unseen', '/work/miss-rhee-beauty-the-space-of-restoration', '/work/my-backyard', '/work/the-form-of-whats-next', '/work/a-world-of-her-own', '/services', '/services/ai-creative-studio', '/services/websites-digital-experiences', '/approach', '/studio', '/insights', '/insights/human-led-ai-how-we-direct-review-and-stay-accountable', '/start-a-project', '/book-a-call', '/contact', '/privacy', '/terms', '/cookies'];
 
 test.describe('routes and crawlable output (QA-05, QA-15, QA-16)', () => {
   test('every public route returns 200 with one H1, a unique title and crawlable content', async ({ request }) => {
@@ -106,19 +106,19 @@ test.describe('work (QA-06, QA-07)', () => {
   test('filters update the announced count and can be cleared', async ({ page }) => {
     await page.goto('/work');
     const count = page.getByText(/^Showing \d+ of \d+ projects?$/);
-    await expect(count).toHaveText(/Showing 3 of 3/);
+    await expect(count).toHaveText(/Showing 5 of 5/);
     await page.getByRole('button', { name: 'Brand Strategy' }).click();
     await expect(page).toHaveURL(/service=brand-strategy-creative-direction/);
-    await expect(count).toHaveText(/Showing 2 of 3/); // DigitFMS, Miss Rhee Beauty
+    await expect(count).toHaveText(/Showing 4 of 5/); // DigitFMS, Miss Rhee Beauty, The Form of What’s Next, A World of Her Own
     await page.getByRole('button', { name: '3D & Motion' }).click();
     // Wait for the filter to apply before reading the count (the old check could read the previous one).
     await expect(page).toHaveURL(/service=3d-animation-motion-design/);
-    await expect(count).toHaveText(/Showing 3 of 3/); // DigitFMS, Miss Rhee Beauty, My Backyard
+    await expect(count).toHaveText(/Showing 5 of 5/); // DigitFMS, Miss Rhee Beauty, My Backyard, The Form of What’s Next, A World of Her Own
     await page.getByRole('button', { name: 'Clear filters' }).click();
-    await expect(count).toHaveText(/Showing 3 of 3/);
+    await expect(count).toHaveText(/Showing 5 of 5/);
     // The two client films are labelled Client Work.
     await page.getByRole('button', { name: /Client Work/ }).click();
-    await expect(count).toHaveText(/Showing 2 of 3/);
+    await expect(count).toHaveText(/Showing 2 of 5/);
     await expect(page.getByRole('button', { name: /Confidential/ })).toBeDisabled();
   });
 
