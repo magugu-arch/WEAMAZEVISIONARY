@@ -129,3 +129,23 @@ test('offline edition: Back to top is a plain link that works with scripts off',
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBeLessThan(50);
   await ctx.close();
 });
+
+test('opened by its web address, the offline edition still plays its films and shows its fonts', async ({ page, request }) => {
+  // Its own policy governs it; the site's header policy would block everything embedded in it.
+  const head = await request.head('/downloads/weamaze-visionary.html');
+  expect(head.status()).toBe(200);
+  expect(head.headers()['content-security-policy']).toBeUndefined();
+  expect(head.headers()['x-frame-options']).toBe('DENY');
+  expect((await request.head('/')).headers()['content-security-policy']).toContain("default-src 'self'");
+
+  const problems: string[] = [];
+  page.on('console', (m) => { if (m.type() === 'error') problems.push(m.text().slice(0, 120)); });
+  await page.exposeFunction('reportViolation', (v: string) => problems.push(v));
+  await page.addInitScript(() => document.addEventListener('securitypolicyviolation', (e) => void (window as unknown as { reportViolation: (v: string) => void }).reportViolation(`${e.violatedDirective} ${e.blockedURI.slice(0, 40)}`)));
+  await page.goto('/downloads/weamaze-visionary.html', { waitUntil: 'load' });
+  const film = page.locator('video').first();
+  await film.evaluate((v: HTMLVideoElement) => { v.muted = true; return v.play(); });
+  await page.waitForFunction(() => { const v = document.querySelector('video'); return Boolean(v && v.currentTime > 0.2 && !v.error); }, null, { timeout: 15_000 });
+  expect(await page.evaluate(() => document.fonts.check('16px "Cormorant Garamond"'))).toBe(true);
+  expect(problems).toEqual([]);
+});

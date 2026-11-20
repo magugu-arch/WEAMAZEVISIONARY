@@ -47,6 +47,8 @@ export type ProjectFilm = {
   durationSec: number;
   durationLabel: string;
   isoDuration: string;
+  /** The date (YYYY-MM-DD) the film was added to the site and cleared for publication; search engines read it as the upload date. */
+  uploadDate: string;
   format: string;
   poster: ImageId;
   sound: string;

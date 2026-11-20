@@ -33,5 +33,5 @@ export function track(event: AnalyticsEvent): void {
 }
 
 function dispatch(_event: AnalyticsEvent): void {
-  // Intentionally empty until an analytics provider is approved (docs/BLOCKERS.md B-13).
+  // Intentionally empty until an analytics provider is approved (owner decision B-13).
 }

@@ -8,6 +8,9 @@ import type { Project } from './types';
  * fragrance, labelled Capability Demonstration, published with the brand owner's permission
  * (owner-confirmed 16 Nov 2026, B-27). Studio concepts are internally created, not paid
  * commissions; The Form of What's Next is the studio's own brand film.
+ *
+ * Notes on work that is held back from production sit inside that work's own entry, so they
+ * leave with it (scripts/hold-back.ts removes whole entries).
  */
 const governance = { publish: 'published', approval: 'pending', owner: 'Owner / creative director' } as const;
 
@@ -58,6 +61,7 @@ export const projects: Project[] = [
       durationSec: 30.05,
       durationLabel: '0:30',
       isoDuration: 'PT30S',
+      uploadDate: '2026-11-12',
       format: '30-second TVC, 16:9',
       poster: 'digitfms-frame-truck-at-dawn',
       sound: 'Voice-over, music and sound effects.',
@@ -150,6 +154,7 @@ export const projects: Project[] = [
       durationSec: 20.09,
       durationLabel: '0:20',
       isoDuration: 'PT20S',
+      uploadDate: '2026-11-12',
       format: '20-second hero film, 16:9',
       poster: 'mrb-frame-awaken',
       sound: 'Voice-over, score and sound design.',
@@ -226,6 +231,7 @@ export const projects: Project[] = [
       durationSec: 15.07,
       durationLabel: '0:15',
       isoDuration: 'PT15S',
+      uploadDate: '2026-11-07',
       format: '15-second animated short, 16:9',
       poster: 'backyard-frame-lens',
       sound: 'Sound design and one line of dialogue.',
@@ -305,6 +311,7 @@ export const projects: Project[] = [
       durationSec: 60.32,
       durationLabel: '1:00',
       isoDuration: 'PT1M',
+      uploadDate: '2026-11-16',
       format: '60-second brand film, 16:9, black and white with a gold reveal',
       poster: 'form-frame-architecture',
       sound: 'Score and sound design, with no dialogue.',
@@ -394,6 +401,7 @@ export const projects: Project[] = [
       durationSec: 59.88,
       durationLabel: '1:00',
       isoDuration: 'PT1M',
+      uploadDate: '2026-11-16',
       format: '60-second fragrance film, 16:9',
       poster: 'herown-frame-entering',
       sound: 'Voice-over and score.',

@@ -1,6 +1,8 @@
 # 14 — Deploy to Hostinger
 
-How to put the WeAmaze Visionary website online on Hostinger, for visitors worldwide. Everything in the project is prepared and tested; nothing has been deployed. The website's design, branding and features are unchanged.
+How to put the WeAmaze Visionary website online on Hostinger, for visitors worldwide. The website's design, branding and features are the same on every option below.
+
+**Where the site runs today (November 2026):** on Hostinger **web hosting**, uploaded into `public_html`, with the PHP form handler receiving the forms. That setup is described in **section 13**; start there to update the live site. Sections 1 to 12 describe the VPS, which remains the recommended step up when the studio wants Node.js features (online scheduling, the CRM link, automatic confirmation emails).
 
 ## Summary: the final settings
 
@@ -134,26 +136,18 @@ Note the server's **IPv4 and IPv6 addresses** (hPanel → VPS → Overview).
 
 In hPanel, open the VPS's **Firewall** settings: create a rule set that **accepts TCP 22, TCP 80, TCP 443 and UDP 443**, and drops everything else, and activate it.
 
-### Step 3: GitHub repository (private)
+### Step 3: GitHub repository
 
-The repository holds private client material (`source-assets`), so it **must be private**.
+There are two copies of the project, and only one of them may be public:
 
-1. On github.com: **New repository** → name `weamaze-visionary` → **Private** → create it empty (no README).
-2. On your computer, from the `deliverables` folder, turn the bundle into a project folder and push it. Use your own GitHub username in the second command:
+| Copy | What it holds | Where it may go |
+|---|---|---|
+| **Public edition** | The website exactly as the public sees it, the server, the form handler and these deployment guides. No original client files, and nothing from work that is not cleared for publication | The public GitHub repository `WEAMAZEVISIONARY`. This is the copy a server downloads |
+| **Full project** | Everything, including the original client files (`source-assets`) and the case studies still awaiting permission | The studio's own computers, or a **private** repository only. Never a public one |
 
-```bash
-git clone weamaze-visionary.gitbundle weamaze-visionary
-```
+The public edition is already on GitHub. The server in step 6 downloads it; you do not need to create anything here.
 
-```bash
-cd weamaze-visionary && git remote set-url origin git@github.com:YOUR-USERNAME/weamaze-visionary.git
-```
-
-```bash
-git push -u origin main
-```
-
-(Alternatively, add the repository to this Claude session and Claude can push it for you.)
+To keep a private backup of the full project on GitHub as well: create a repository there, set it to **Private** before pushing anything, and push the full project to it. Check that GitHub shows the **Private** label first.
 
 ### Step 4: Connect to the server
 
@@ -163,7 +157,9 @@ From your computer (or with hPanel's **Browser terminal**):
 ssh root@YOUR_SERVER_IP
 ```
 
-### Step 5: Give the server read-only access to the repository
+### Step 5: Give the server read-only access (private repositories only)
+
+**Skip this step** when the server downloads the public edition: a public repository needs no key. It is only needed if you deploy from a private repository.
 
 On the server, create a deploy key:
 
@@ -183,9 +179,13 @@ printf 'Host github.com\n  IdentityFile /root/.ssh/github_deploy\n  IdentitiesOn
 
 ### Step 6: Download the project
 
+The public edition (use your GitHub username in place of `YOUR-USERNAME`):
+
 ```bash
-git clone git@github.com:YOUR-USERNAME/weamaze-visionary.git /opt/weamaze-visionary
+git clone https://github.com/YOUR-USERNAME/WEAMAZEVISIONARY.git /opt/weamaze-visionary
 ```
+
+From a private repository instead (after step 5), the address is `git@github.com:YOUR-USERNAME/REPOSITORY.git`.
 
 ```bash
 cd /opt/weamaze-visionary
@@ -382,7 +382,7 @@ The production setup was built from a clean copy of the project and run with `do
 - **Environment and secrets:** settings are validated at start-up. No secrets are in the built site or the repository. `npm audit` reports 0 vulnerabilities.
 - **Test suites:** all 96 unit tests and all 100 browser tests pass, as do the type check and lint.
 
-**Not tested here:** Hostinger's own servers (the VPS and DNS do not exist yet), real Let's Encrypt certificates, Cloudflare, and real email delivery (no Resend key yet). Safari and Firefox are covered in `docs/06_QA_REPORT.md`.
+**Not tested here:** Hostinger's own servers (the VPS and DNS do not exist yet), real Let's Encrypt certificates, Cloudflare, and real email delivery (no Resend key yet). Safari and Firefox have not been tested either: only Chromium is available in the build environment, so check the live site once in each.
 
 ## 13. Hostinger web hosting (Premium or Business): upload with the PHP form handler
 
@@ -395,7 +395,7 @@ Use this when the site runs on ordinary Hostinger web hosting, uploaded through 
 | Part | What it does |
 |---|---|
 | The pages, images, films, fonts and scripts | The production site, exactly as built for the Node.js host |
-| `.htaccess` | Clean page addresses (`/work`), the site's 404 page, all 12 security headers, compression and caching, and sends every `/api/...` request to the PHP program |
+| `.htaccess` | Clean page addresses (`/work`), the site's 404 page, all 12 security headers, compression and caching, and sends every `/api/...` request to the PHP program. Two small ones sit in `assets/` (year-long caching) and `downloads/` (the offline edition keeps its own security policy) |
 | `api/index.php` and `api/src/` | The form handler (source in `deploy/hostinger-static/api`) |
 | `api/config.php` | The settings: where emails go, the sender address, the spam limits |
 
@@ -447,6 +447,7 @@ Every enquiry is in your inbox. The saved files are in File Manager under `weama
 | `/api/health` shows `"storage":"unavailable"` | The handler cannot create its data folder. Ask Hostinger support to confirm PHP may write to the folder next to `public_html`, or set `data_dir` to a folder you created |
 | "Request sent", but no email arrives | Check spam; check that the `mail_from` mailbox exists in hPanel → Emails; the enquiry is saved either way, and the email is retried automatically |
 | "Too many submissions" during your own tests | Wait 10 minutes, or raise `rate_limit_max` in `config.local.php` while testing |
+| Real visitors report "Too many submissions" after you turn on a CDN | Behind a CDN, different visitors can appear to come from one address and share the limit of 5. Raise `rate_limit_max` to about 20 in `config.local.php`; the limit of 60 an hour for the whole site still protects the inbox |
 
 ### Testing the web hosting package
 

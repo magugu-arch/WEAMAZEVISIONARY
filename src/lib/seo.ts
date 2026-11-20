@@ -199,7 +199,7 @@ export function resolveMeta(pathname: string): RouteMeta {
               description: p.summary,
               thumbnailUrl: [abs(`/images/${p.film.poster}-1536.jpg`)],
               contentUrl: abs(`/video/${p.film.key}-720p.mp4`),
-              uploadDate: '2026-11-07', // first published on this site; publication pending permission (B-14)
+              uploadDate: p.film.uploadDate,
               duration: p.film.isoDuration,
               isFamilyFriendly: true,
               accessibilityFeature: ['captions', 'longDescription'],

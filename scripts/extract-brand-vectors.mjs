@@ -10,19 +10,25 @@
  * Fidelity rule: path data is copied byte-for-byte from the PDF→SVG conversion.
  * Only the viewBox is moved onto the artwork's bounds. Nothing is redrawn,
  * traced, simplified or retyped. Replace with the 02_LOGO_SYSTEM masters when
- * supplied (see docs/BLOCKERS.md B-01).
+ * supplied (owner decision B-01).
  *
  * Requires poppler-utils (pdftocairo). Outputs are committed, so this only
  * needs re-running if the manual changes.
  */
 import { execFileSync } from 'node:child_process';
-import { mkdtempSync, readFileSync, writeFileSync, mkdirSync, rmSync } from 'node:fs';
+import { existsSync, mkdtempSync, readFileSync, writeFileSync, mkdirSync, rmSync } from 'node:fs';
 import { tmpdir } from 'node:os';
 import { join, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const pdf = join(root, 'source-assets/02_ci_source/WeAmaze_Visionary_Corporate_Identity_Manual_v1.0.pdf');
+// The identity manual is kept with the studio's private source files. Without it there is
+// nothing to extract from; the artwork already generated from it is part of the project.
+if (!existsSync(pdf)) {
+  console.error('Brand artwork is extracted from the Corporate Identity Manual, which is not in this copy of the project.\nNothing to do: the generated artwork (src/components/brand/artwork.generated.ts and public/brand) is already included.');
+  process.exit(0);
+}
 const work = mkdtempSync(join(tmpdir(), 'wv-ci-'));
 
 const GOLD = 'rgb(77.648926%, 63.139343%, 41.569519%)'; // #C6A16A

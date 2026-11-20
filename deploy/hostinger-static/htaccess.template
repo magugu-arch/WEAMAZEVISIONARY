@@ -21,6 +21,10 @@ DirectorySlash Off
   RewriteCond %{REQUEST_FILENAME} -d
   RewriteCond %{REQUEST_FILENAME}/index.html -f
   RewriteRule ^(.+)$ /$1/index.html [L]
+  # A folder with no page of its own (such as /images) is "not found", as on the Node.js host.
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteCond %{REQUEST_FILENAME}/index.html !-f
+  RewriteRule ^ - [R=404,L]
 </IfModule>
 
 # Correct types for modern files.

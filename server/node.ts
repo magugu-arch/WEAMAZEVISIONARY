@@ -16,7 +16,7 @@ import { serverEnv } from './lib/env';
 import { log } from './lib/log';
 import { regionRole, routeApi } from './lib/region';
 import { BodyTooLarge, clientIp, sendResponse, toRequest } from './lib/nodeAdapter';
-import { securityHeaders } from './lib/security';
+import { isSelfContainedDownload, securityHeaders, withoutSitePolicy } from './lib/security';
 
 const here = fileURLToPath(new URL('.', import.meta.url));
 // Take the site mode from the build when the host does not set it (server/lib/buildInfo.ts).
@@ -118,7 +118,9 @@ const server = createServer(async (req, res) => {
     const { file, status } = resolveFile(url.pathname);
     const ext = extname(file);
     const stat = statSync(file);
-    const headers: Record<string, string> = { ...baseHeaders, 'content-type': TYPES[ext] ?? 'application/octet-stream', 'cache-control': status === 404 ? 'no-cache' : cacheControl(url.pathname.endsWith('/') || !extname(url.pathname) ? '/x.html' : url.pathname), 'last-modified': stat.mtime.toUTCString() };
+    // The offline edition carries its own policy; the site's would block what is embedded in it.
+    const fileHeaders = status === 200 && isSelfContainedDownload(url.pathname) ? withoutSitePolicy(baseHeaders) : baseHeaders;
+    const headers: Record<string, string> = { ...fileHeaders, 'content-type': TYPES[ext] ?? 'application/octet-stream', 'cache-control': status === 404 ? 'no-cache' : cacheControl(url.pathname.endsWith('/') || !extname(url.pathname) ? '/x.html' : url.pathname), 'last-modified': stat.mtime.toUTCString() };
 
     // Byte ranges: required by Safari for video, and lets large downloads resume.
     const range = req.headers.range;

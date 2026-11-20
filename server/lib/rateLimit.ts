@@ -1,7 +1,7 @@
 /**
  * Fixed-window rate limiter keyed by client IP + route. In-memory: limits apply
  * per server instance. For multi-instance hosting, back this with a shared
- * store (documented in 07_HANDOVER.md). IPs are hashed and never persisted.
+ * store. IPs are hashed and never persisted.
  */
 import { createHash } from 'node:crypto';
 

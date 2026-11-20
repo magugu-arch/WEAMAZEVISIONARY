@@ -46,6 +46,7 @@ const htaccess = readFileSync(join(source, 'htaccess.template'), 'utf8')
 if (htaccess.includes('{{')) throw new Error('htaccess.template has a placeholder that was not filled in.');
 writeFileSync(join(out, '.htaccess'), htaccess);
 writeFileSync(join(out, 'assets/.htaccess'), readFileSync(join(source, 'assets.htaccess'), 'utf8'));
+writeFileSync(join(out, 'downloads/.htaccess'), readFileSync(join(source, 'downloads.htaccess'), 'utf8'));
 
 let files = 0;
 let bytes = 0;

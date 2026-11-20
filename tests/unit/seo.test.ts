@@ -77,6 +77,12 @@ describe('content integrity', () => {
   it('film case studies carry captions, a shot list and a script source note, and add no claims', () => {
     for (const p of projects.filter((x) => x.film)) {
       const f = p.film!;
+      // Search engines are told each film's own date, never one date for all of them.
+      expect(f.uploadDate).toMatch(/^2026-\d\d-\d\d$/);
+      if (publishableProjects(projects, 'production').includes(p)) {
+        const video = resolveMeta(`/work/${p.slug}`).jsonLd.find((x) => (x as { '@type'?: string })['@type'] === 'VideoObject') as { uploadDate?: string } | undefined;
+        expect(video?.uploadDate, p.slug).toBe(f.uploadDate);
+      }
       expect(f.script.length).toBeGreaterThan(0);
       expect(f.shots[0]!.start).toBe(0);
       for (let i = 1; i < f.shots.length; i++) expect(f.shots[i]!.start).toBe(f.shots[i - 1]!.end);

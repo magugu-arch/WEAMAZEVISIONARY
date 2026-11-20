@@ -2,7 +2,7 @@ import { describe, expect, it } from 'vitest';
 import { z } from 'zod';
 import '@shared/enquiry';
 import { CSP_REPORT_PATH, PERMISSIONS_POLICY, headerCsp, metaCsp } from '@shared/security';
-import { securityHeaders } from '@server/lib/security';
+import { isSelfContainedDownload, securityHeaders, withoutSitePolicy } from '@server/lib/security';
 import { cspReports } from '@server/api/router';
 
 describe('security policy', () => {
@@ -40,6 +40,18 @@ describe('security policy', () => {
     expect(securityHeaders({ hsts: false, indexable: false })['x-robots-tag']).toBe('noindex, nofollow');
   });
 
+  it('leaves the site policy off the offline edition only, and keeps every other header on it', () => {
+    expect(isSelfContainedDownload('/downloads/weamaze-visionary.html')).toBe(true);
+    for (const p of ['/', '/work', '/downloads', '/downloads/', '/downloads/a/b.html', '/downloads/file.mp4', '/work/downloads/x.html', '/api/enquiries']) expect(isSelfContainedDownload(p), p).toBe(false);
+    const site = securityHeaders({ hsts: true, indexable: true });
+    const file = withoutSitePolicy(site);
+    expect(file['content-security-policy']).toBeUndefined();
+    expect(file['reporting-endpoints']).toBeUndefined();
+    const { 'content-security-policy': _csp, 'reporting-endpoints': _rep, ...others } = site;
+    expect(file).toEqual(others);
+    expect(file['x-frame-options']).toBe('DENY'); // framing stays forbidden without the policy
+    expect(site['content-security-policy']).toBeDefined(); // the original is not changed
+  });
   it('runs form validation without eval, so the policy has nothing to block', () => {
     expect(z.config().jitless).toBe(true);
   });

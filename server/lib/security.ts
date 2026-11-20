@@ -23,3 +23,20 @@ export function securityHeaders(opts: { hsts: boolean; indexable: boolean }): Re
     ...(opts.indexable ? {} : { 'x-robots-tag': 'noindex, nofollow' }),
   };
 }
+
+/**
+ * The offline edition (/downloads/….html) is one self-contained file with its own, stricter
+ * policy in a <meta> tag: it may load nothing from anywhere, only what is embedded in it.
+ * The site's header policy is written for the site's pages (files from this server only).
+ * Browsers apply both, so together they blocked the file's embedded films and fonts
+ * whenever it was opened by its address instead of being downloaded. For that file the
+ * header policy is left out and the file's own policy governs. Every other header stays,
+ * including the ones that forbid framing, which a <meta> policy cannot do.
+ */
+export const isSelfContainedDownload = (pathname: string): boolean => /^\/downloads\/[^/]+\.html$/.test(pathname);
+export function withoutSitePolicy(headers: Record<string, string>): Record<string, string> {
+  const rest = { ...headers };
+  delete rest['content-security-policy'];
+  delete rest['reporting-endpoints'];
+  return rest;
+}

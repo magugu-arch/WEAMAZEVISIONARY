@@ -84,3 +84,17 @@ test('a problem the server finds is shown beside the field, and nothing is lost'
   await expect(page.getByTestId('contact-reference')).toHaveCount(0);
   await expect(page.getByLabel('Your request')).toHaveValue('This message is long enough to pass.');
 });
+
+test('the offline edition opened by its web address plays its films (its own policy applies)', async ({ page, request }) => {
+  const head = await request.head('/downloads/weamaze-visionary.html');
+  expect(head.status()).toBe(200);
+  expect(head.headers()['content-security-policy']).toBeUndefined();
+  expect(head.headers()['x-frame-options']).toBe('DENY');
+  expect((await request.head('/')).headers()['content-security-policy']).toContain("default-src 'self'");
+  const problems = watch(page);
+  await page.goto('/downloads/weamaze-visionary.html', { waitUntil: 'load' });
+  await page.locator('video').first().evaluate((v: HTMLVideoElement) => { v.muted = true; return v.play(); });
+  await page.waitForFunction(() => { const v = document.querySelector('video'); return Boolean(v && v.currentTime > 0.2 && !v.error); }, null, { timeout: 15_000 });
+  expect(problems).toEqual([]);
+});
+

@@ -13,6 +13,10 @@ const vite = await createServer({
   logLevel: 'error',
   appType: 'custom',
   server: { middlewareMode: true, hmr: false },
+  // Only the content modules are loaded. Without this, Vite also scans every HTML file in the
+  // project for dependencies (deliverables and source files included) and prints errors
+  // when the server closes before that scan ends.
+  optimizeDeps: { noDiscovery: true, include: [] },
   resolve: { alias: { '@': fileURLToPath(new URL('../src', import.meta.url)), '@shared': fileURLToPath(new URL('../shared', import.meta.url)) } },
 });
 const load = (p) => vite.ssrLoadModule(p);
@@ -52,8 +56,8 @@ manual.push('B-01 Replace extracted CI artwork with the 02_LOGO_SYSTEM master fi
 manual.push('B-02/B-03 Approve the hero film master, web encodes, posters, mobile crop, loop and audio rights');
 manual.push('B-05 Confirm rights/releases/provenance for all people imagery');
 manual.push('B-20 Trademark search and registration through an attorney');
-manual.push('Verify Google Search Console and Bing Webmaster Tools; submit sitemap (docs/05_SEO.md)');
-manual.push('Run docs/06_QA_REPORT.md cross-browser checks on Safari, Firefox, Edge, iOS Safari and Android Chrome');
+manual.push('Verify Google Search Console and Bing Webmaster Tools; submit the sitemap (see the SEO guide, docs/05_SEO.md)');
+manual.push('Run the cross-browser checks on Safari, Firefox, Edge, iOS Safari and Android Chrome (only Chromium is tested automatically)');
 
 const line = (s) => console.log(`  • ${s}`);
 console.log(`\nWeAmaze Visionary — launch check (${production ? 'PRODUCTION' : 'report only'})\n`);
