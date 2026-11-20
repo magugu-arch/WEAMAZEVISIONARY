@@ -395,7 +395,7 @@ Use this when the site runs on ordinary Hostinger web hosting, uploaded through 
 | Part | What it does |
 |---|---|
 | The pages, images, films, fonts and scripts | The production site, exactly as built for the Node.js host |
-| `.htaccess` | Clean page addresses (`/work`), the site's 404 page, all 12 security headers, compression and caching, and sends every `/api/...` request to the PHP program. Two small ones sit in `assets/` (year-long caching) and `downloads/` (the offline edition keeps its own security policy) |
+| `.htaccess` | Clean page addresses (`/work`), `www` to the bare domain, the site's 404 page (also for folders with no page of their own, such as `/images`), all 12 security headers, compression and caching, and sends every `/api/...` request to the PHP program. Two small ones sit in `assets/` (year-long caching) and `downloads/` (the offline edition keeps its own security policy) |
 | `api/index.php` and `api/src/` | The form handler (source in `deploy/hostinger-static/api`) |
 | `api/config.php` | The settings: where emails go, the sender address, the spam limits |
 
@@ -421,6 +421,7 @@ Use this when the site runs on ordinary Hostinger web hosting, uploaded through 
 1. Open `https://weamazevisionary.com/api/health`. It should show `"forms":"php"` and `"storage":"ok"`.
 2. Send a test message from the **Contact** page. You should see "Request sent" with a reference such as `WV-MSG-2026-…`, and an email should reach weamazevisionary@gmail.com within a few minutes. Check the spam folder the first time, and mark it "Not spam".
 3. In File Manager, the folder `weamaze-visionary-data/leads` (next to `public_html`) now holds a file named after the reference.
+4. Open `https://weamazevisionary.com/images`. It should show the site's "Page not found" page. (With the upload of 16 November 2026 the browser reported "too many redirects" instead; that upload's other pages were not affected.)
 
 ### Settings
 
@@ -451,7 +452,13 @@ Every enquiry is in your inbox. The saved files are in File Manager under `weama
 
 ### Testing the web hosting package
 
-`scripts/compare-form-servers.mjs` sends 62 cases (valid forms, every kind of mistake, attacks, double sends) to the Node server and the PHP handler and fails on any difference in the replies or the saved answers. `playwright.hostinger.config.ts` runs the three forms end to end in a browser, on desktop and phone, against a running copy of the package. On 16 November 2026, on Apache with PHP 7.4, 8.3 and 8.4: no differences in 62 cases, 8 of 8 browser tests passed, all 31 pages and 167 links and assets loaded (re-run after the two films were added), and email, retry, rate limits and the private data folder behaved as described above.
+`scripts/compare-form-servers.mjs` sends 62 cases (valid forms, every kind of mistake, attacks, double sends) to the Node server and the PHP handler and fails on any difference in the replies or the saved answers. `playwright.hostinger.config.ts` runs the three forms end to end in a browser, on desktop and phone, against a running copy of the package, and checks the address rules, the caching and the offline edition. Both need a **test copy** with the limits relaxed, because a test types faster than a person: in its `api/config.local.php`, set `rate_limit_max` and `global_limit_max` to 1000 and `min_form_seconds` to 0. Never use those values on the live site.
+
+**20 November 2026, the package:** on Apache with PHP 8.3, no differences in 62 cases, 14 of 14 browser tests passed, and all 31 pages and 167 links and assets loaded. (PHP 7.4 and 8.4 were tested on 16 November; the PHP program has not changed since.) The address rules were also run on a LiteSpeed server (OpenLiteSpeed 1.9.4) and on Apache set to add the slash to folder addresses by itself, as Hostinger's server does: 48 and 14 requests for folders with no page, every one answered "not found", none redirected in a circle.
+
+**20 November 2026, the live site** (the upload of 16 November, read only: no form was sent): all 33 addresses loaded on desktop and phone with no console errors, failed files or blocked content; 39 internal links answered; `/api/health` reported `"forms":"php"` and `"storage":"ok"`; an empty form was refused with the right message and a form from another site with 403; all 12 security headers, Brotli compression and film seeking were present; none of the held-back work was in the public files. One fault was found: a folder with no page of its own (`/images`, `/video`, `/assets`, `/downloads`, `/app-icons`) redirected to itself for ever, because Hostinger's server (LiteSpeed) adds a slash to folder addresses and the site's rule removed it again. No page links to those addresses, so visitors were not affected. The rule now answers such folders first, before any redirect. `www.weamazevisionary.com` showed the site under a second address; it now redirects to the bare domain, as on the VPS. Fonts in `assets/` were kept for 7 days instead of a year; corrected.
+
+**Servers:** the package is for Hostinger web hosting (LiteSpeed) and for Apache. It is not for OpenLiteSpeed, which some VPS control panels install: that server applies its own folder redirects unpredictably, so a page address asked for with a trailing slash can start redirecting in a circle. On a VPS, use the Docker setup in section 8.
 
 ## Before going live
 

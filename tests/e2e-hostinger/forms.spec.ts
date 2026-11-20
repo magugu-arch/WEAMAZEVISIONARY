@@ -98,3 +98,30 @@ test('the offline edition opened by its web address plays its films (its own pol
   expect(problems).toEqual([]);
 });
 
+
+test('a folder with no page of its own is "not found", and never sends a visitor round in a circle', async ({ request }) => {
+  // Found on the live site (20 November 2026): /images redirected to /images/ and back for ever.
+  for (const path of ['/images', '/images/', '/assets', '/assets/', '/video/', '/downloads', '/app-icons/']) {
+    const res = await request.get(path, { maxRedirects: 0 });
+    expect(res.status(), path).toBe(404);
+    expect(await res.text(), path).toContain('Page not found');
+  }
+  // Pages keep one address: the slash form redirects once, and the page itself answers.
+  const slash = await request.get('/work/', { maxRedirects: 0 });
+  expect(slash.status()).toBe(301);
+  expect(new URL(slash.headers().location ?? '', 'http://x').pathname).toBe('/work');
+  expect((await request.get('/work', { maxRedirects: 0 })).status()).toBe(200);
+});
+
+test('scripts, styles and fonts are kept for a year; www goes to the bare domain', async ({ request }) => {
+  const home = await (await request.get('/')).text();
+  const files = [...home.matchAll(/(?:href|src)="(\/assets\/[^"]+\.(?:js|css|woff2))"/g)].map((m) => m[1] ?? '');
+  for (const kind of ['.woff2', '.js', '.css']) {
+    const file = files.find((f) => f.endsWith(kind)) ?? '';
+    expect(file, `the home page loads a ${kind} file from /assets`).not.toBe('');
+    expect((await request.head(file)).headers()['cache-control'], file).toBe('public, max-age=31536000, immutable');
+  }
+  const www = await request.get('/work?from=test', { maxRedirects: 0, headers: { host: 'www.weamazevisionary.test' } });
+  expect(www.status()).toBe(301);
+  expect(www.headers().location).toBe('https://weamazevisionary.test/work?from=test');
+});

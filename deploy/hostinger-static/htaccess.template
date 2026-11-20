@@ -11,9 +11,20 @@ ErrorDocument 404 /404.html
 DirectorySlash Off
 <IfModule mod_rewrite.c>
   RewriteEngine On
+  # One address for the site, as on the VPS: www.weamazevisionary.com goes to weamazevisionary.com.
+  RewriteCond %{HTTP_HOST} ^www\.(.+)$ [NC]
+  RewriteRule ^ https://%1%{REQUEST_URI} [R=301,L,NE]
   # The forms: every /api/... address goes to the PHP program (api/.htaccess does the same).
   RewriteRule ^api/index\.php$ - [L]
   RewriteRule ^api(/.*)?$ api/index.php [L]
+  # A folder with no page of its own (/images or /images/) is "not found", as on the Node.js
+  # host. This must come before the trailing-slash redirect below: LiteSpeed adds a slash to a
+  # folder's address by itself, and the two redirects together would send a visitor round in
+  # a circle. A real folder is therefore answered here and never redirected. It is answered by
+  # pointing at an address that does not exist, which every server turns into the 404 page.
+  RewriteCond %{REQUEST_FILENAME} -d
+  RewriteCond %{REQUEST_FILENAME}/index.html !-f
+  RewriteRule ^ /__not-found [L]
   # One permanent redirect from /work/ to /work (the home page keeps its slash).
   RewriteCond %{REQUEST_URI} ^/(.+)/$
   RewriteRule ^ /%1 [R=301,L,NE]
@@ -21,10 +32,6 @@ DirectorySlash Off
   RewriteCond %{REQUEST_FILENAME} -d
   RewriteCond %{REQUEST_FILENAME}/index.html -f
   RewriteRule ^(.+)$ /$1/index.html [L]
-  # A folder with no page of its own (such as /images) is "not found", as on the Node.js host.
-  RewriteCond %{REQUEST_FILENAME} -d
-  RewriteCond %{REQUEST_FILENAME}/index.html !-f
-  RewriteRule ^ - [R=404,L]
 </IfModule>
 
 # Correct types for modern files.

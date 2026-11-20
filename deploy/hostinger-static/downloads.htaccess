@@ -2,6 +2,8 @@
 # inside it (it may load nothing from anywhere). The site's policy, sent with every other
 # file, would block its embedded films and fonts when it is opened by its address, so it is
 # left out for this folder. Every other header stays, including the ones that forbid framing.
+# Both forms are given: Apache keeps "always" headers apart, LiteSpeed keeps one list.
 <IfModule mod_headers.c>
   Header always unset Content-Security-Policy
+  Header unset Content-Security-Policy
 </IfModule>
