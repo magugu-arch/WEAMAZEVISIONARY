@@ -423,6 +423,8 @@ Use this when the site runs on ordinary Hostinger web hosting, uploaded through 
 3. In File Manager, the folder `weamaze-visionary-data/leads` (next to `public_html`) now holds a file named after the reference.
 4. Open `https://weamazevisionary.com/images`. It should show the site's "Page not found" page. (With the upload of 16 November 2026 the browser reported "too many redirects" instead; that upload's other pages were not affected.)
 
+From the project folder, one command runs these checks and the rest (address rules, caching, the offline edition, film dates, security headers) without sending anything: `node scripts/verify-hostinger-live.mjs https://weamazevisionary.com`. Against the upload of 16 November it reports 6 failed checks; against the package of 20 November, none.
+
 ### Settings
 
 To change a setting, copy `api/config.php` to `api/config.local.php` in File Manager and edit the copy: it wins over `config.php`. Re-upload `config.local.php` after any future upload of the site, or keep a copy.
