@@ -425,6 +425,8 @@ Use this when the site runs on ordinary Hostinger web hosting, uploaded through 
 
 From the project folder, one command runs these checks and the rest (address rules, caching, the offline edition, film dates, security headers) without sending anything: `node scripts/verify-hostinger-live.mjs https://weamazevisionary.com`. Against the upload of 16 November it reports 6 failed checks; against the package of 20 November, none.
 
+Step 2 can also be run as a test: `node scripts/test-hostinger-contact.mjs https://weamazevisionary.com --send` fills in the Contact page in a real browser as a visitor would, sends **one** message named "Website test … please ignore" from the site's own address, checks that the page confirms it with a reference, and prints the subject and sender to look for in the inbox. Without `--send` it fills the form in and sends nothing. It cannot open the inbox: confirming that the email arrived stays with a person. On 21 November 2026 it passed against a local copy of the package, where the mail service's copy of the email matched what the test printed; it has not been run with `--send` against the live site.
+
 ### Settings
 
 To change a setting, copy `api/config.php` to `api/config.local.php` in File Manager and edit the copy: it wins over `config.php`. Re-upload `config.local.php` after any future upload of the site, or keep a copy.
