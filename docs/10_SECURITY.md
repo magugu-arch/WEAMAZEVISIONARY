@@ -40,6 +40,7 @@ A browser crawl of every route, on desktop and phone, shows no console errors, n
 ## On Hostinger web hosting (where the site runs today)
 The live site is served as plain files with a small PHP program for the forms (`docs/14_DEPLOY_HOSTINGER.md`, section 13). The table above describes the Node.js server; on this hosting:
 
+- **The offline file** is sent with its own, stricter policy as the header (the one written inside it, plus the ban on framing) in place of the site's policy, rather than with no policy header as on the Node.js server.
 - **The same:** every security header (sent by `.htaccess`, built from `shared/security.ts`), Subresource Integrity, the `<meta>` policies, and all the form protections: same-site checks, the honeypot, the minimum fill time, 5 sends per visitor in 10 minutes, one-off keys against double sends, and the 64 KB limit. A 62-case comparison (`scripts/compare-form-servers.mjs`) confirms the PHP program accepts and refuses exactly what the Node.js server does.
 - **Enquiries** are saved in a `weamaze-visionary-data` folder next to `public_html`, outside the website, as files only the hosting account can read. Visitor addresses are never written down: the limits keep a keyed fingerprint for about an hour.
 - **Email** is sent by the hosting's own mail service. Nothing typed into a form can add recipients or change an email's headers (tested with injected headers in every field). No API keys are involved, so there are no secrets on this hosting.

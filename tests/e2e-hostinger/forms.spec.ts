@@ -88,7 +88,12 @@ test('a problem the server finds is shown beside the field, and nothing is lost'
 test('the offline edition opened by its web address plays its films (its own policy applies)', async ({ page, request }) => {
   const head = await request.head('/downloads/weamaze-visionary.html');
   expect(head.status()).toBe(200);
-  expect(head.headers()['content-security-policy']).toBeUndefined();
+  // Its own, stricter policy replaces the site's (which would block its embedded films and fonts).
+  const policy = head.headers()['content-security-policy'] ?? '';
+  expect(policy).toContain("default-src 'none'");
+  expect(policy).toMatch(/script-src 'sha256-[A-Za-z0-9+/=]+'/);
+  expect(policy).toContain("frame-ancestors 'none'");
+  expect(policy).not.toContain("default-src 'self'");
   expect(head.headers()['x-frame-options']).toBe('DENY');
   expect((await request.head('/')).headers()['content-security-policy']).toContain("default-src 'self'");
   const problems = watch(page);
@@ -101,7 +106,7 @@ test('the offline edition opened by its web address plays its films (its own pol
 
 test('a folder with no page of its own is "not found", and never sends a visitor round in a circle', async ({ request }) => {
   // Found on the live site (20 November 2026): /images redirected to /images/ and back for ever.
-  for (const path of ['/images', '/images/', '/assets', '/assets/', '/video/', '/downloads', '/app-icons/']) {
+  for (const path of ['/images', '/images/', '/assets', '/assets/', '/video/', '/downloads', '/downloads/', '/app-icons/']) {
     const res = await request.get(path, { maxRedirects: 0 });
     expect(res.status(), path).toBe(404);
     expect(await res.text(), path).toContain('Page not found');

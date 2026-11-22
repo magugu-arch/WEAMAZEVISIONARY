@@ -67,13 +67,25 @@ DirectorySlash Off
   Header always unset X-Powered-By
 
   # Caching: pages are checked for updates on every visit; images and films are kept for
-  # 7 days; scripts, styles and fonts (whose names change when they change) for a year
-  # (assets/.htaccess). Font files are deliberately not listed below: on LiteSpeed a rule
-  # here wins over the one in assets/, where every font lives, and would cut them to 7 days.
+  # 7 days; scripts, styles and fonts for a year (they all live in assets/ under names that
+  # change when their contents change). These rules are all here, by file type, and no
+  # folder has a rule file of its own: on LiteSpeed a folder with its own .htaccess is
+  # redirected to its trailing-slash address before the rules above can answer it.
   <FilesMatch "\.(html|xml|txt|json|webmanifest)$">
     Header set Cache-Control "no-cache"
   </FilesMatch>
   <FilesMatch "\.(avif|webp|jpg|jpeg|png|svg|ico|mp4|webm|vtt)$">
     Header set Cache-Control "public, max-age=604800, stale-while-revalidate=86400"
+  </FilesMatch>
+  <FilesMatch "\.(js|mjs|css|woff|woff2)$">
+    Header set Cache-Control "public, max-age=31536000, immutable"
+  </FilesMatch>
+
+  # The offline edition (downloads/weamaze-visionary.html) is one self-contained file. The
+  # site's policy above would block its embedded films and fonts when it is opened by its
+  # address, so it is sent with its own, stricter policy instead: the one written inside the
+  # file, which lets it load nothing from anywhere. Framing stays forbidden.
+  <FilesMatch "weamaze-visionary\.html$">
+    Header always set Content-Security-Policy "{{OFFLINE_CSP}}"
   </FilesMatch>
 </IfModule>

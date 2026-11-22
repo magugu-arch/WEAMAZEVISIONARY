@@ -30,15 +30,21 @@ describe('Hostinger web hosting address rules', () => {
     expect(at('api/index.php [L]')).toBeLessThan(at('/__not-found'));
   });
 
-  it('names no file type from /assets in its own caching rules (on LiteSpeed they would win over assets/.htaccess)', () => {
-    const sevenDays = template.match(/<FilesMatch "\\\.\(([a-z0-9|]+)\)\$">\n\s+Header set Cache-Control "public, max-age=604800/);
-    expect(sevenDays).not.toBeNull();
-    const types = (sevenDays?.[1] ?? '').split('|');
-    for (const inAssets of ['js', 'css', 'woff', 'woff2']) expect(types).not.toContain(inAssets);
-    expect(types).toEqual(expect.arrayContaining(['avif', 'webp', 'mp4', 'webm']));
+  it('caches by file type in this one file: a week for images and films, a year for what lives in /assets', () => {
+    const rule = (maxAge: string) => (template.match(new RegExp(`<FilesMatch "\\\\\\.\\(([a-z0-9|]+)\\)\\$">\\n\\s+Header set Cache-Control "public, max-age=${maxAge}`)) ?? [])[1]?.split('|') ?? [];
+    const week = rule('604800');
+    const year = rule('31536000, immutable');
+    expect(week).toEqual(expect.arrayContaining(['avif', 'webp', 'mp4', 'webm']));
+    expect(year).toEqual(expect.arrayContaining(['js', 'css', 'woff', 'woff2']));
+    // On LiteSpeed the rules go by file type whatever the folder, so no type may be in both.
+    for (const type of year) expect(week).not.toContain(type);
   });
 
-  it('leaves no placeholder behind except the three the build fills in', () => {
-    expect(template.match(/\{\{[A-Z_]+\}\}/g)).toEqual(['{{CSP}}', '{{REFERRER_POLICY}}', '{{PERMISSIONS_POLICY}}']);
+  it('sends the offline edition with its own policy in place of the site policy', () => {
+    expect(template).toMatch(/<FilesMatch "weamaze-visionary\\\.html\$">\n\s+Header always set Content-Security-Policy "\{\{OFFLINE_CSP\}\}"/);
+  });
+
+  it('leaves no placeholder behind except the four the build fills in', () => {
+    expect(template.match(/\{\{[A-Z_]+\}\}/g)).toEqual(['{{CSP}}', '{{REFERRER_POLICY}}', '{{PERMISSIONS_POLICY}}', '{{OFFLINE_CSP}}']);
   });
 });
