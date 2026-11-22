@@ -54,8 +54,8 @@ export const insights: Insight[] = [
     sources: [{ label: 'WeAmaze Visionary AI production governance', note: 'Internal studio process, as described on this page. Not legal advice.' }],
     relatedServices: ['ai-creative-studio', 'ai-solutions-automation', '3d-animation-motion-design'],
     seo: {
-      title: 'Human-led AI: how we direct, review and stay accountable',
-      description: 'How WeAmaze Visionary uses AI in creative production: a named lead owns direction, six control points, human review checks, confidential inputs and agreed disclosure.',
+      title: 'Human-led AI: how we stay accountable',
+      description: 'How we use AI in creative production: a named lead owns direction, six control points, human review, confidential inputs and agreed disclosure.',
     },
     governance,
   },
@@ -91,7 +91,7 @@ export const insights: Insight[] = [
     sources: [{ label: 'WeAmaze Visionary project builder and approach', note: 'The questions mirror the studio’s project enquiry steps and its six-stage approach.' }],
     relatedServices: ['brand-strategy-creative-direction', 'websites-digital-experiences', 'ai-presentations-pitch-decks'],
     seo: {
-      title: 'What to prepare before briefing a creative studio',
+      title: 'Before you brief a creative studio',
       description: 'Objective, audience, decision-makers, assets and rights, constraints, timing, investment and success measures: what to prepare before a creative brief.',
     },
     governance,
@@ -136,8 +136,8 @@ export const insights: Insight[] = [
     sources: [{ label: 'WeAmaze Visionary rights and publication controls', note: 'Studio project controls for client-supplied assets, third-party licences, likeness, trademarks, fonts and ownership. Not legal advice.' }],
     relatedServices: ['ai-creative-studio', 'brand-strategy-creative-direction', '3d-animation-motion-design'],
     seo: {
-      title: 'Rights in AI-assisted creative work: what to settle first',
-      description: 'Supplied assets, stock licences, music and voice, likeness, trademarks, fonts, ownership and portfolio rights: the questions to settle before AI-assisted production.',
+      title: 'Rights in AI-assisted creative work',
+      description: 'Supplied assets, stock licences, music, voice, likeness, trademarks, fonts and ownership: the rights to settle before AI-assisted production.',
     },
     governance,
   },
@@ -184,7 +184,7 @@ export const insights: Insight[] = [
     sources: [{ label: 'WeAmaze Visionary services and production governance', note: 'How this studio defines and runs its work, as described across this website. Not legal advice.' }],
     relatedServices: ['ai-creative-studio', 'brand-strategy-creative-direction', 'ai-solutions-automation'],
     seo: {
-      title: 'What an AI creative studio does, and when to hire one',
+      title: 'What an AI creative studio does',
       description: 'What an AI creative studio is, what you should receive, when it is the right partner, and five questions to ask before you hire one.',
     },
     governance,
@@ -223,8 +223,8 @@ export const insights: Insight[] = [
     sources: [{ label: 'WeAmaze Visionary film production practice', note: 'How this studio scopes AI-assisted films, as shown in the storyboards and films on this site. No prices are given because every project is estimated on its scope.' }],
     relatedServices: ['ai-creative-studio', '3d-animation-motion-design'],
     seo: {
-      title: 'What shapes the cost of an AI-assisted brand film',
-      description: 'Length, realism, likeness, product accuracy, sound, versions and revision rounds: the decisions that move the cost of an AI-assisted brand film, and how to brief for a quote.',
+      title: 'What drives the cost of an AI brand film',
+      description: 'Length, realism, likeness, product accuracy, sound, versions and revisions: what moves the cost of an AI-assisted brand film, and how to brief for a quote.',
     },
     governance,
   },

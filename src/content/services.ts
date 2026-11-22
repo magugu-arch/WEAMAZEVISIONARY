@@ -79,7 +79,7 @@ export const services: Service[] = [
     related: ['3d-animation-motion-design', 'brand-strategy-creative-direction', 'ai-presentations-pitch-decks'],
     image: 'team-reviewing-printed-frames',
     seo: {
-      title: 'AI Creative Studio — human-directed AI content and films',
+      title: 'AI Creative Studio — human-led AI films',
       description: 'Campaigns, branded films and visual worlds directed by people and produced with generative craft. Concepts, styleframes, AI-assisted video and finishing.',
     },
     governance,
@@ -125,7 +125,7 @@ export const services: Service[] = [
     related: ['brand-strategy-creative-direction', 'ai-creative-studio', 'websites-digital-experiences'],
     image: 'meeting-room-presentation-discussion',
     seo: {
-      title: 'AI Presentations & Pitch Decks — investor and sales decks',
+      title: 'AI Pitch Decks & Presentations',
       description: 'Pitch decks, sales and leadership presentations, proposals and company profiles. Narrative first, clear information design and editable files at handover.',
     },
     governance,
@@ -172,7 +172,7 @@ export const services: Service[] = [
     related: ['apps-digital-products', 'brand-strategy-creative-direction', 'ai-solutions-automation'],
     image: 'layout-review-laptop-and-screen',
     seo: {
-      title: 'Websites & Digital Experiences — UX, design and build',
+      title: 'Websites & Digital Experiences',
       description: 'Corporate, campaign and portfolio websites, landing pages and e-commerce. UX-led design, accessible builds, CMS, SEO and analytics foundations.',
     },
     governance,
@@ -214,7 +214,7 @@ export const services: Service[] = [
     related: ['websites-digital-experiences', 'digital-innovation-technology', 'ai-solutions-automation'],
     image: 'mobile-interface-on-stone',
     seo: {
-      title: 'Apps & Digital Products — strategy, UX/UI and prototypes',
+      title: 'Apps & Digital Products — UX/UI design',
       description: 'Web apps, mobile experiences, dashboards and portals, from product strategy and prototypes to interface design, build and release.',
     },
     governance,
@@ -263,7 +263,7 @@ export const services: Service[] = [
     related: ['digital-innovation-technology', 'apps-digital-products', 'websites-digital-experiences'],
     image: 'pair-reviewing-work-on-screen',
     seo: {
-      title: 'AI Solutions & Automation — workflows and assistants',
+      title: 'AI Solutions & Workflow Automation',
       description: 'Workflow mapping, AI assistants, knowledge search and automation with approved integrations, human oversight, evaluation and monitoring.',
     },
     governance,
@@ -305,7 +305,7 @@ export const services: Service[] = [
     related: ['ai-creative-studio', 'brand-strategy-creative-direction', 'apps-digital-products'],
     image: 'film-frame-structure-and-light',
     seo: {
-      title: '3D, Animation & Motion Design — visualisation and motion',
+      title: '3D, Animation & Motion Design',
       description: '3D design and product visualisation, 2D/3D animation, motion graphics, VFX and compositing, from storyboard to channel-ready masters.',
     },
     governance,
@@ -347,7 +347,7 @@ export const services: Service[] = [
     related: ['ai-creative-studio', 'ai-presentations-pitch-decks', 'websites-digital-experiences'],
     image: 'strategy-session-with-colour-swatches',
     seo: {
-      title: 'Brand Strategy & Creative Direction — positioning',
+      title: 'Brand Strategy & Creative Direction',
       description: 'Research, positioning, messaging, identity direction, campaign platforms and brand guidelines, with creative direction through rollout.',
     },
     governance,
@@ -388,7 +388,7 @@ export const services: Service[] = [
     related: ['ai-solutions-automation', 'apps-digital-products', 'websites-digital-experiences'],
     image: 'hand-drafting-geometric-construction',
     seo: {
-      title: 'Digital Innovation & Technology — prototypes and pilots',
+      title: 'Digital Innovation — prototypes & pilots',
       description: 'Opportunity framing, feasibility, prototypes, pilots, integration planning and product roadmaps for new digital capabilities.',
     },
     governance,

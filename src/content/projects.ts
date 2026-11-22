@@ -102,7 +102,7 @@ export const projects: Project[] = [
     },
     permission: { publicationApproved: true, note: 'Client work supplied by the owner for the Work section. Permission to publish received from DigitFMS (owner confirmation, 12 Nov 2026). Still to confirm: credits, and music and voice-over rights; check the captions against the final mix (B-14, B-24).' },
     seo: {
-      title: 'DigitFMS “Nothing moves unseen” TVC — client work',
+      title: 'DigitFMS fleet TVC — client work',
       description: 'A 30-second TVC for DigitFMS that turns six fleet and security services into one journey, with its storyboard and the strategy behind it.',
       ogImage: 'digitfms-frame-truck-at-dawn',
     },
@@ -182,7 +182,7 @@ export const projects: Project[] = [
     },
     permission: { publicationApproved: true, note: 'Client work supplied by the owner for the Work section. Permission to publish received from Miss Rhee Beauty (owner confirmation, 12 Nov 2026). Still to confirm: credits, and music and voice-over rights; check the captions against the final mix (B-14, B-24).' },
     seo: {
-      title: 'Miss Rhee Beauty “The Space of Restoration” — client work',
+      title: 'Miss Rhee Beauty hero film — client work',
       description: 'A 20-second hero film for Miss Rhee Beauty built on the promise “Your beauty was never lost”, with its director’s storyboard and the strategy behind it.',
       ogImage: 'mrb-frame-awaken',
     },
@@ -261,8 +261,8 @@ export const projects: Project[] = [
     },
     permission: { publicationApproved: false, note: 'Supplied by the owner for the Work section with no client named, so labelled Studio Concept. Confirm the studio owns it (or name the client and relabel), the credits, and the music and voice rights; check the captions against the final mix (B-14, B-24).' },
     seo: {
-      title: 'My Backyard animated short — studio concept',
-      description: 'A 15-second felt-textured animated short in which a magnifying glass turns wonder into a scare and back into a laugh, with its storyboard and the strategy behind it.',
+      title: 'My Backyard — animated short concept',
+      description: 'A 15-second felt-textured animated short in which a magnifying glass turns wonder into a scare and back into a laugh, with its storyboard.',
       ogImage: 'backyard-frame-lens',
     },
     governance,
@@ -343,8 +343,8 @@ export const projects: Project[] = [
     },
     permission: { publicationApproved: true, note: 'The studio’s own brand film, supplied by the owner on 16 November 2026. No client or other company’s brand appears. Confirm the music and sound rights and check the caption cues against the final mix (B-24).' },
     seo: {
-      title: 'The Form of What’s Next — WeAmaze Visionary brand film',
-      description: 'A 60-second black-and-white brand film in which a line of light travels from mountains to architecture and becomes the WeAmaze Visionary monogram, with its storyboard and the thinking behind it.',
+      title: 'The Form of What’s Next — our brand film',
+      description: 'A 60-second black-and-white brand film: a line of light travels from mountains to architecture and becomes the WeAmaze Visionary monogram.',
       ogImage: 'form-frame-architecture',
     },
     governance,
@@ -450,8 +450,8 @@ export const projects: Project[] = [
       note: 'A speculative film featuring BOSS The Scent for Her, not commissioned by the brand’s owners. On 16 November 2026 the owner confirmed that permission to publish it has been received from the brand owner (B-27). Keep the written permission on file; check the captions against the final mix (B-24).',
     },
     seo: {
-      title: 'A World of Her Own — fragrance film concept',
-      description: 'A 60-second fragrance film concept that makes a scent felt on screen: a bottle, a bloom and a world that answers her steps, with its storyboard and the strategy behind it.',
+      title: 'A World of Her Own — fragrance concept',
+      description: 'A 60-second fragrance film concept that makes a scent felt on screen: a bottle, a bloom and a world that answers her steps, with its storyboard.',
       ogImage: 'herown-frame-entering',
     },
     governance,

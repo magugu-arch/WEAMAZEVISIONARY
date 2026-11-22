@@ -2,7 +2,7 @@
 
 ## Implemented
 - **Crawlable HTML.** Every public route is prerendered at build time (`scripts/prerender.mjs`) with full content, so pages do not depend on JavaScript to show their text. The client hydrates the same markup.
-- **Metadata.** Each route has a unique `<title>` and meta description (unit-tested: unique, ≤ 80 and ≤ 200 characters), plus a canonical URL on `PUBLIC_SITE_URL`, Open Graph and Twitter tags, and an OG image per service, case study and article (default `og-default.jpg`).
+- **Metadata.** Each route has a unique `<title>` and meta description (unit-tested: unique, a title of at most 60 characters and a description of at most 160, so search results show both in full), plus a canonical URL on `PUBLIC_SITE_URL`, Open Graph and Twitter tags, and an OG image per service, case study and article (default `og-default.jpg`).
 - **Status codes.** Real `200`, `301` (trailing slash, redirect register) and `404` for unknown or unpublished slugs. The 404 page is branded and `noindex`.
 - **Sitemap** (`/sitemap.xml`): canonical, published routes only. Unapproved legal drafts, `/system` and `/book-a-call/manage` are excluded.
 - **Robots** (`/robots.txt`): staging blocks everything and sends `X-Robots-Tag: noindex` on every response. Production disallows only `/api/`, `/system` and `/book-a-call/manage`, and points to the sitemap.

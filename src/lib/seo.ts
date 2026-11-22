@@ -128,7 +128,7 @@ const NOT_FOUND: Omit<RouteMeta, 'path'> = {
 };
 
 const STATIC: Record<string, { title: string; description: string; crumbs?: string; noindex?: boolean }> = {
-  '/': { title: `${BRAND} — AI Creative Studio for Brands Worldwide`, description: 'A human-led AI creative studio for brands worldwide: brand films, campaigns, pitch decks, websites, apps and automation from one senior team. Creative Intelligence, Made Real.' },
+  '/': { title: `${BRAND} — AI Creative Studio for Brands Worldwide`, description: 'A human-led AI creative studio for brands worldwide: brand films, campaigns, pitch decks, websites, apps and automation from one senior team.' },
   '/work': { title: `Work | ${BRAND}`, description: 'Selected work from WeAmaze Visionary, each piece clearly labelled as client work or studio concept.', crumbs: 'Work' },
   '/services': { title: `Services | ${BRAND}`, description: 'Eight connected capabilities, from AI Creative Studio and pitch decks to websites, apps, automation, 3D and motion, brand strategy and digital innovation.', crumbs: 'Services' },
   '/approach': { title: `Approach | ${BRAND}`, description: 'How we work: six stages from Discover to Evolve, each with a clear output, a decision point and defined responsibilities.', crumbs: 'Approach' },

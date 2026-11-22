@@ -13,9 +13,11 @@ describe('route metadata', () => {
     expect(new Set(metas.map((m) => m.title)).size).toBe(metas.length);
     expect(new Set(metas.map((m) => m.description)).size).toBe(metas.length);
     for (const m of metas) {
-      expect(m.title.length).toBeLessThanOrEqual(80);
+      // Short enough to show in full in search results: about 60 characters for a title
+      // and 160 for a description before Google and Bing cut them off with "…".
+      expect(m.title.length, m.title).toBeLessThanOrEqual(60);
       expect(m.description.length).toBeGreaterThan(50);
-      expect(m.description.length).toBeLessThanOrEqual(200);
+      expect(m.description.length, m.path).toBeLessThanOrEqual(160);
     }
   });
 
