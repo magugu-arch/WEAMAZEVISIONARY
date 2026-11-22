@@ -24,10 +24,16 @@ const results = [];
 const check = (name, ok, detail) => results.push({ name, ok: Boolean(ok), detail });
 const get = (p, o = {}) => rq.get(BASE + p, { maxRedirects: 0, ...o });
 
-// 1. Folder addresses with no page: "not found", never a redirect.
+// 1. Folder addresses with no page end in "not found" and never go round in a circle. On
+//    LiteSpeed a folder that has its own .htaccess (assets, downloads) is first given its
+//    trailing slash by the server, so one redirect before the answer is allowed.
 const folders = [];
-for (const p of ['/images', '/images/', '/video', '/assets/', '/downloads', '/app-icons/']) { const r = await get(p); folders.push(`${p}=${r.status()}`); }
-check('folders with no page answer "not found" (no redirect circle)', folders.every((f) => f.endsWith('=404')), folders.join(' '));
+for (const p of ['/images', '/images/', '/video', '/assets', '/assets/', '/downloads', '/downloads/', '/app-icons/']) {
+  let url = BASE + p; let hops = 0; let r = await rq.get(url, { maxRedirects: 0 });
+  while (r.status() >= 300 && r.status() < 400 && hops < 4) { url = new URL(r.headers().location ?? '', url).toString(); hops += 1; r = await rq.get(url, { maxRedirects: 0 }); }
+  folders.push({ p, status: r.status(), hops });
+}
+check('folders with no page end in "not found" (no redirect circle)', folders.every((f) => f.status === 404 && f.hops <= 1), folders.map((f) => `${f.p}=${f.status}${f.hops ? ` after ${f.hops} redirect` : ''}`).join(' '));
 // 2. Pages keep one address.
 const work = await get('/work'); const slash = await get('/work/');
 check('pages: /work loads, /work/ redirects once to /work', work.status() === 200 && slash.status() === 301 && /\/work$/.test(slash.headers().location || ''), `/work=${work.status()} /work/=${slash.status()} -> ${slash.headers().location}`);
@@ -36,12 +42,21 @@ if (live) {
   const host = new URL(BASE).host; const r = await rq.get(`https://www.${host}/work`, { maxRedirects: 0 }).catch((e) => ({ status: () => 'ERR', headers: () => ({ location: e.message.slice(0, 60) }) }));
   check('www redirects to the bare domain', r.status() === 301 && r.headers().location === `https://${host}/work`, `${r.status()} -> ${r.headers().location}`);
 }
-// 4. Caching of hashed files, fonts included.
+// 4. Caching of hashed files, fonts included. The server's own answer is what is checked
+//    (a fresh address bypasses any CDN copy); copies a CDN cached before an update keep
+//    their old header until it refreshes them, which is reported but is not a fault.
 const home = await (await get('/')).text();
 const files = [...home.matchAll(/(?:href|src)="(\/assets\/[^"]+\.(?:js|css|woff2))"/g)].map((m) => m[1]);
 const cache = [];
-for (const kind of ['.woff2', '.js', '.css']) { const f = files.find((x) => x.endsWith(kind)); const r = await rq.head(BASE + f); cache.push(`${kind}: ${r.headers()['cache-control']}`); }
-check('scripts, styles and fonts are kept for a year', cache.every((c) => c.includes('max-age=31536000, immutable')), cache.join(' | '));
+let staleCopies = 0;
+for (const kind of ['.woff2', '.js', '.css']) {
+  const f = files.find((x) => x.endsWith(kind));
+  const fresh = (await rq.head(`${BASE}${f}?fresh=${Date.now()}`)).headers()['cache-control'];
+  const served = (await rq.head(BASE + f)).headers()['cache-control'];
+  if (served !== fresh) staleCopies += 1;
+  cache.push(`${kind}: ${fresh}`);
+}
+check('scripts, styles and fonts are kept for a year', cache.every((c) => c.includes('max-age=31536000, immutable')), cache.join(' | ') + (staleCopies ? ` · note: the CDN still holds ${staleCopies} older cop${staleCopies === 1 ? 'y' : 'ies'} with the previous header; they refresh by themselves, or at once with "Clear cache" in hPanel` : ''));
 // 5. Offline edition by its address: no site policy header, films and fonts not blocked.
 const off = await rq.head(BASE + '/downloads/weamaze-visionary.html');
 check('offline edition: the site policy header is left off, framing still forbidden', off.status() === 200 && off.headers()['content-security-policy'] === undefined && off.headers()['x-frame-options'] === 'DENY', `status ${off.status()} · policy header ${off.headers()['content-security-policy'] ? 'present' : 'absent'} · x-frame-options ${off.headers()['x-frame-options']}`);
