@@ -67,11 +67,13 @@ DirectorySlash Off
   Header always unset X-Powered-By
 
   # Caching: pages are checked for updates on every visit; images and films are kept for
-  # 7 days; scripts and styles (whose names change when they change) for a year (assets/.htaccess).
+  # 7 days; scripts, styles and fonts (whose names change when they change) for a year
+  # (assets/.htaccess). Font files are deliberately not listed below: on LiteSpeed a rule
+  # here wins over the one in assets/, where every font lives, and would cut them to 7 days.
   <FilesMatch "\.(html|xml|txt|json|webmanifest)$">
     Header set Cache-Control "no-cache"
   </FilesMatch>
-  <FilesMatch "\.(avif|webp|jpg|jpeg|png|svg|ico|mp4|webm|vtt|woff2)$">
+  <FilesMatch "\.(avif|webp|jpg|jpeg|png|svg|ico|mp4|webm|vtt)$">
     Header set Cache-Control "public, max-age=604800, stale-while-revalidate=86400"
   </FilesMatch>
 </IfModule>

@@ -1,5 +1,6 @@
 # Scripts, styles and fonts here have content-hashed names: cache them for a year.
-# Written per file so it also replaces the 7-day rule the main .htaccess gives font files.
+# The main .htaccess must not name any file type found in this folder: on LiteSpeed its
+# per-type rules win over this file (found on the live site, 22 November 2026).
 <IfModule mod_headers.c>
   <FilesMatch ".">
     Header set Cache-Control "public, max-age=31536000, immutable"

@@ -30,6 +30,14 @@ describe('Hostinger web hosting address rules', () => {
     expect(at('api/index.php [L]')).toBeLessThan(at('/__not-found'));
   });
 
+  it('names no file type from /assets in its own caching rules (on LiteSpeed they would win over assets/.htaccess)', () => {
+    const sevenDays = template.match(/<FilesMatch "\\\.\(([a-z0-9|]+)\)\$">\n\s+Header set Cache-Control "public, max-age=604800/);
+    expect(sevenDays).not.toBeNull();
+    const types = (sevenDays?.[1] ?? '').split('|');
+    for (const inAssets of ['js', 'css', 'woff', 'woff2']) expect(types).not.toContain(inAssets);
+    expect(types).toEqual(expect.arrayContaining(['avif', 'webp', 'mp4', 'webm']));
+  });
+
   it('leaves no placeholder behind except the three the build fills in', () => {
     expect(template.match(/\{\{[A-Z_]+\}\}/g)).toEqual(['{{CSP}}', '{{REFERRER_POLICY}}', '{{PERMISSIONS_POLICY}}']);
   });
