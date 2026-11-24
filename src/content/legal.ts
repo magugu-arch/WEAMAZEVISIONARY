@@ -1,10 +1,11 @@
 import type { InsightBlock } from './types';
 
 /**
- * DRAFTS FOR LEGAL REVIEW (B-12). They describe what this website actually
- * does with data, as implemented, so that counsel can review real data flows.
- * They are not legal advice and are not approved. `scripts/launch-check.mjs`
- * blocks a production build while `approved` is false.
+ * Privacy, cookie and terms pages (B-12). They describe what this website
+ * actually does with data, as implemented. Approved by the owner as written on
+ * 24 November 2026 (D-47), so they are indexed and in the sitemap; the lines
+ * marked CONFIRM still await the owner's details. `scripts/launch-check.mjs`
+ * blocks a production build if `approved` is set back to false.
  */
 export type LegalPage = { slug: 'privacy' | 'terms' | 'cookies'; title: string; summary: string; approved: boolean; lastReviewed: string | null; body: InsightBlock[] };
 
@@ -15,8 +16,8 @@ export const legalPages: LegalPage[] = [
     slug: 'privacy',
     title: 'Privacy notice',
     summary: 'What this website collects, why, where it goes and the choices you have.',
-    approved: false,
-    lastReviewed: null,
+    approved: true,
+    lastReviewed: '2026-11-24',
     body: [
       { type: 'h2', id: 'who', text: 'Who we are' },
       { type: 'p', text: `This website is operated by WeAmaze Visionary. Registered entity, address and privacy contact: ${CONFIRM}` },
@@ -48,8 +49,8 @@ export const legalPages: LegalPage[] = [
     slug: 'cookies',
     title: 'Cookie notice',
     summary: 'This website does not currently use analytics, advertising or tracking cookies.',
-    approved: false,
-    lastReviewed: null,
+    approved: true,
+    lastReviewed: '2026-11-24',
     body: [
       { type: 'h2', id: 'now', text: 'What we use today' },
       { type: 'p', text: 'This website sets no cookies. It stores a small number of strictly necessary preferences in your browser:' },
@@ -67,8 +68,8 @@ export const legalPages: LegalPage[] = [
     slug: 'terms',
     title: 'Website terms',
     summary: 'The terms that apply to using the WeAmaze Visionary website, and how enquiries relate to contracts.',
-    approved: false,
-    lastReviewed: null,
+    approved: true,
+    lastReviewed: '2026-11-24',
     body: [
       { type: 'h2', id: 'use', text: 'Using this website' },
       { type: 'p', text: 'This website describes the services of WeAmaze Visionary. You may browse it, share links to it and contact us through it.' },
