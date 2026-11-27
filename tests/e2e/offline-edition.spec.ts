@@ -54,9 +54,12 @@ for (const [name, device] of Object.entries(PHONES)) {
       await first.locator('summary').click();
       await expect(first).toHaveAttribute('open', '');
       await expect(first.getByText('How it works')).toBeVisible();
-      // In-page navigation only.
-      const hrefs = await page.locator('a[href]').evaluateAll((as) => as.map((a) => a.getAttribute('href') ?? ''));
-      expect(hrefs.filter((h) => !h.startsWith('#') && !h.startsWith('mailto:'))).toEqual([]);
+      // In-page navigation only, plus the two ways to reach the studio: its email and its own
+      // channels (rel="me"). Both are followed only when tapped; neither loads anything.
+      const links = await page.locator('a[href]').evaluateAll((as) => as.map((a) => ({ href: a.getAttribute('href') ?? '', rel: a.getAttribute('rel') ?? '' })));
+      const channels = links.filter((l) => /^https:\/\//.test(l.href) && l.rel.split(/\s+/).includes('me')).map((l) => l.href);
+      expect(channels).toEqual(['https://www.youtube.com/@weamazevisionary']);
+      expect(links.map((l) => l.href).filter((h) => !h.startsWith('#') && !h.startsWith('mailto:') && !channels.includes(h))).toEqual([]);
       // No horizontal overflow.
       expect(await page.evaluate(() => document.documentElement.scrollWidth - document.documentElement.clientWidth)).toBeLessThanOrEqual(0);
       expect(external).toEqual([]);

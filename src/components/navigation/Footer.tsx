@@ -1,4 +1,5 @@
 import { PrimaryLogo } from '@/components/brand/Logo';
+import { SocialLinks } from '@/components/brand/SocialLinks';
 import { AppLink } from '@/components/ui/AppLink';
 import { ReturnHome } from './ReturnHome';
 import { legalNav } from '@/content/navigation';
@@ -21,6 +22,7 @@ export function Footer() {
             <AppLink to="/" aria-label="WeAmaze Visionary — home" className="inline-block">
               <PrimaryLogo height={124} tone="reversed" decorative />
             </AppLink>
+            <SocialLinks className="mt-6" />
           </div>
           <nav aria-label="Services" className="col-span-2 md:col-span-2 lg:col-span-2">
             <p className="t-label mb-4 text-ivory">Services</p>
@@ -46,7 +48,6 @@ export function Footer() {
               <li><AppLink to="/contact" className={col}>Contact and partnerships</AppLink></li>
               {/* If the address must wrap in a narrow column, it breaks once, after the @. */}
               {email ? <li className="min-w-0"><a href={`mailto:${email}`} className={`${col} [overflow-wrap:anywhere]`}><span>{email.split('@')[0]}@<wbr />{email.split('@')[1]}</span></a></li> : null}
-              {settings.social.map((s) => <li key={s.url}><a href={s.url} className={col} rel="me noopener">{s.label}</a></li>)}
             </ul>
           </nav>
         </div>

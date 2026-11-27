@@ -122,9 +122,16 @@ export function writeStandalone({ clientDir, cssFile, html, head, outFile }) {
 `;
   mkdirSync(join(outFile, '..'), { recursive: true });
   writeFileSync(outFile, doc);
-  const external = (doc.match(/(?:src|href|poster)="(?:https?:)?\/\/[^"]+"/g) ?? []).filter((m) => !m.includes('schema.org'));
+  const external = (loadsOf(doc).match(/(?:src|href|poster)="(?:https?:)?\/\/[^"]+"/g) ?? []).filter((m) => !m.includes('schema.org'));
   return { bytes: statSync(outFile).size, external };
 }
+
+/**
+ * The page with its plain links set aside, leaving only what the browser fetches by itself
+ * on opening it. A link (such as the studio's YouTube channel) is followed only when a person
+ * taps it, so it is not a request the edition makes.
+ */
+const loadsOf = (html) => html.replace(/<a\b[^>]*>/g, '<a>');
 
 /**
  * The same edition laid out for Claude Artifacts: body content only (the host wraps it in
@@ -157,7 +164,7 @@ export function writeArtifact({ clientDir, cssFile, html, outDir, swap = {} }) {
   writeFileSync(join(outDir, 'index.html'), page);
   let bytes = statSync(join(outDir, 'index.html')).size;
   for (const [rel, src] of files) { copyFileSync(src, join(outDir, rel)); bytes += statSync(src).size; }
-  const external = (page.match(/(?:src|href|poster)="(?:https?:)?\/\/[^"]+"/g) ?? []).filter((m) => !m.includes('schema.org') && !/\/\/fonts\.(googleapis|gstatic)\.com/.test(m));
+  const external = (loadsOf(page).match(/(?:src|href|poster)="(?:https?:)?\/\/[^"]+"/g) ?? []).filter((m) => !m.includes('schema.org') && !/\/\/fonts\.(googleapis|gstatic)\.com/.test(m));
   const embedded = page.match(/data:(?!image\/(?:jpeg|png|gif|webp))[a-z]+\/[a-z0-9.+-]+/g) ?? [];
   if (embedded.length) throw new Error(`Artifact edition embeds files public sharing refuses: ${[...new Set(embedded)].join(', ')}`);
   return { pageBytes: statSync(join(outDir, 'index.html')).size, totalBytes: bytes, files: [...files.keys()], external };

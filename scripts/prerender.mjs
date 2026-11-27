@@ -10,6 +10,7 @@ import { createHash } from 'node:crypto';
 import { fileURLToPath, pathToFileURL } from 'node:url';
 import { writeArtifact, writeStandalone } from './standalone.mjs';
 import { heldBackWork, scrubOutput } from './hold-back.ts';
+import { pageFingerprint, sitemapDates } from './sitemap-dates.mjs';
 
 const root = join(dirname(fileURLToPath(import.meta.url)), '..');
 const client = join(root, 'dist/client');
@@ -74,20 +75,31 @@ const routes = ssr.publicRoutes();
 if (ssr.SITE_ENV !== 'production') routes.push('/system');
 routes.push('/book-a-call/manage');
 let count = 0;
+const rendered = new Map();
 for (const url of routes) {
   const { page, status } = await renderRoute(url);
   if (status !== 200) throw new Error(`Prerender: ${url} returned ${status}`);
   const out = url === '/' ? join(client, 'index.html') : join(client, url, 'index.html');
   mkdirSync(dirname(out), { recursive: true });
   writeFileSync(out, page);
+  rendered.set(url, page);
   count++;
 }
 const nf = await renderRoute('/__not-found__');
 writeFileSync(join(client, '404.html'), nf.page);
 
-// Sitemap: canonical, published, indexable routes only.
-const lastmod = new Date().toISOString().slice(0, 10);
-const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${ssr.sitemapRoutes().map((r) => `  <url><loc>${ssr.SITE_URL}${r === '/' ? '/' : r}</loc><lastmod>${lastmod}</lastmod></url>`).join('\n')}\n</urlset>\n`;
+// Sitemap: canonical, published, indexable routes only, each dated by its last real change
+// (scripts/sitemap-dates.mjs). Only production builds record new dates.
+const dates = sitemapDates({
+  file: join(root, 'scripts/sitemap-dates.json'),
+  fingerprints: new Map(ssr.sitemapRoutes().map((r) => {
+    if (!rendered.has(r)) throw new Error(`Prerender: sitemap route ${r} was not rendered`);
+    return [r, pageFingerprint(rendered.get(r))];
+  })),
+  today: new Date().toISOString().slice(0, 10),
+  write: ssr.SITE_ENV === 'production',
+});
+const sitemap = `<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n${ssr.sitemapRoutes().map((r) => `  <url><loc>${ssr.SITE_URL}${r === '/' ? '/' : r}</loc><lastmod>${dates.get(r)}</lastmod></url>`).join('\n')}\n</urlset>\n`;
 writeFileSync(join(client, 'sitemap.xml'), sitemap);
 // Robots: staging blocks everything; production blocks only API, system and private routes.
 // AI assistants: answer and search crawlers are always welcome (they are how the studio is

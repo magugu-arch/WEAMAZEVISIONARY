@@ -1,4 +1,5 @@
 import { HorizontalLogo, Monogram, PrimaryLogo, ServiceIcon } from '@/components/brand/Logo';
+import { SocialLinks } from '@/components/brand/SocialLinks';
 import { AscentLine, MonogramSupergraphic, MotifLane } from '@/components/brand/Motifs';
 import { ReturnFace, returnRow } from '@/components/navigation/ReturnHome';
 import { statusDescription, STATUS_LABELS } from '@/components/ui/StatusLabel';
@@ -425,7 +426,10 @@ export function StandaloneEdition({ generatedOn, preview }: { generatedOn: strin
           <a href="#top" className={returnRow} data-testid="return-home"><ReturnFace label="Back to top" /></a>
         </div>
         <div className="wv-container flex flex-col gap-10 py-16 md:flex-row md:items-end md:justify-between">
-          <PrimaryLogo height={124} decorative />
+          <div>
+            <PrimaryLogo height={124} decorative />
+            <SocialLinks className="mt-6" />
+          </div>
           <div className="space-y-3 md:text-right">
             <p className="t-label text-platinum">{settings.tagline}</p>
             <p className="t-caption text-platinum">© {settings.copyrightYear} {settings.name}. All rights reserved.</p>

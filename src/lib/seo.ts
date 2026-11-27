@@ -91,6 +91,7 @@ export function llmsTxt(): string {
     `- [Book a discovery call](${abs('/book-a-call')})`,
     `- [Contact](${abs('/contact')})${publicEmail() ? `: ${publicEmail()}` : ''}`,
     '',
+    ...(settings.social.length ? ['## Elsewhere', ...settings.social.map((s) => `- [${s.label}](${s.url}): the studio's channel`), ''] : []),
   ];
   return lines.join('\n');
 }

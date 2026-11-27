@@ -4,13 +4,13 @@
 - **Crawlable HTML.** Every public route is prerendered at build time (`scripts/prerender.mjs`) with full content, so pages do not depend on JavaScript to show their text. The client hydrates the same markup.
 - **Metadata.** Each route has a unique `<title>` and meta description (unit-tested: unique, a title of at most 60 characters and a description of at most 160, so search results show both in full), plus a canonical URL on `PUBLIC_SITE_URL`, Open Graph and Twitter tags, and an OG image per service, case study and article (default `og-default.jpg`).
 - **Status codes.** Real `200`, `301` (trailing slash, redirect register) and `404` for unknown or unpublished slugs. The 404 page is branded and `noindex`.
-- **Sitemap** (`/sitemap.xml`): canonical, published routes only. Unapproved legal drafts, `/system` and `/book-a-call/manage` are excluded.
+- **Sitemap** (`/sitemap.xml`): canonical, published routes only. Unapproved legal drafts, `/system` and `/book-a-call/manage` are excluded. Each page's `<lastmod>` is the day what it says last changed (title, description, canonical, robots rule, structured data or main content), not the build date: Google uses these dates to decide what to recrawl, but only while they prove accurate. The dates live in `scripts/sitemap-dates.json`; production builds update it and it is committed with the change (`scripts/sitemap-dates.mjs`, unit-tested). Header, footer and renamed build files do not move a date. Seeded on 27 November 2026 from the live pages, so it starts from the dates Google has already seen.
 - **Robots** (`/robots.txt`): staging blocks everything and sends `X-Robots-Tag: noindex` on every response. Production disallows only `/api/`, `/system` and `/book-a-call/manage`, and points to the sitemap.
 - **Structured data**, factual only:
 
   | Page | Schema |
   |---|---|
-  | Home | `Organization` (name, URL, logo, description, slogan; no address, phone, rating or unverified profiles), `WebSite` |
+  | Home | `Organization` (name, URL, logo, description, slogan, `sameAs` with the studio's YouTube channel; no address, phone, rating or unverified profiles), `WebSite` |
   | Services | `Service`, `BreadcrumbList` |
   | Case studies | `BreadcrumbList` |
   | Articles | `Article` (organisation author), `BreadcrumbList` |
@@ -29,7 +29,7 @@ Assistants answer from what their search crawlers can read and from what other s
 What the build cannot do on its own (owner actions, in order of impact):
 1. **Publish proof.** The production build shows five film case studies; two more pieces of work are waiting for written permission. Case studies are the evidence assistants and buyers cite.
 2. **Now the site is live on the domain,** verify Google Search Console **and Bing Webmaster Tools** (ChatGPT search draws on Bing's index) and submit the sitemap.
-3. **Be named elsewhere:** LinkedIn company page, Google Business Profile, and listings on agency directories such as Clutch, DesignRush and Behance, with the same name, description and URL everywhere; then add them to `settings.social` so they appear as `sameAs` (B-19).
+3. **Be named elsewhere:** LinkedIn company page, Google Business Profile, and listings on agency directories such as Clutch, DesignRush and Behance, with the same name, description and URL everywhere; then add them to `settings.social` so they appear as `sameAs` and as footer icons (B-19). YouTube is in place (27 November 2026): link each film's YouTube description to its case study on the site.
 4. **Show the people:** a founder or team page with real names, roles and experience (expertise is a ranking and citation signal; nothing is invented here).
 5. **Publish answers:** one well-sourced article a month on the questions buyers ask (for example, what an AI creative studio costs, how rights work in AI-made content).
 6. **Earn mentions:** client case studies on clients' own sites, interviews, awards entries and talks. Third-party mentions are what assistants repeat.
@@ -43,3 +43,6 @@ The eight service pages map one-to-one to the intent clusters (AI video and bran
 2. **Google Search Console:** add a *Domain property* for `weamazevisionary.com` from a business-owned Google account. Verify with the DNS TXT record at the registrar, then submit `https://<host>/sitemap.xml` and inspect Home, one service, one case study and one article.
 3. **Bing Webmaster Tools:** sign in with a business-owned account and import the site from Search Console (or verify by DNS CNAME/TXT), then submit the sitemap.
 4. **Monitor:** coverage, manual actions, Core Web Vitals and structured-data reports, monthly (see the maintenance plan). Keep both accounts in company ownership.
+5. **Asking Google for a page.** Only a signed-in owner can do this: Google's Indexing API is limited to job postings and livestreams, and its sitemap "ping" was retired in 2023. A link of this form opens URL Inspection for one page, after which **Request indexing** is one tap (about 10 a day):
+   `https://search.google.com/search-console/inspect?resource_id=sc-domain%3Aweamazevisionary.com&id=<the page address, URL-encoded>`
+   "Crawled – currently not indexed" is Google's choice, not a site error: it is answered by accurate sitemap dates, links from other sites and time, not by repeated requests.

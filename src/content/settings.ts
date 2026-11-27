@@ -1,3 +1,6 @@
+/** Networks the footer can show a mark for (src/components/brand/SocialLinks.tsx). */
+export type SocialNetwork = 'youtube';
+
 /**
  * Global settings (V10 §16 "Site settings"). Every business fact carries a
  * verification flag. Unverified facts are never rendered publicly.
@@ -28,8 +31,15 @@ export const settings = {
   /** No phone or physical address is published (CI §23: none printed on stationery). */
   phone: null as string | null,
   address: null as string | null,
-  /** CI footer names LinkedIn and Instagram but no URLs were supplied (B-19). */
-  social: [] as { label: string; url: string }[],
+  /**
+   * The studio's own channels: shown as icons in the footer and listed as `sameAs` in the
+   * Organization data. YouTube was supplied by the owner on 27 Nov 2026 (without the share
+   * link's tracking code). The CI footer also names LinkedIn and Instagram, but no addresses
+   * have been supplied for them (B-19).
+   */
+  social: [
+    { network: 'youtube', label: 'YouTube', url: 'https://www.youtube.com/@weamazevisionary' },
+  ] as { network: SocialNetwork; label: string; url: string }[],
   /** Budget ranges are an owner decision (B-17). Empty = no ranges shown. */
   budgetRanges: [] as { id: string; label: string }[],
   /** No response-time promise until an SLA is approved (B-18). */
